@@ -35,7 +35,7 @@ def power_data(simple=True):
     reactive = data * 0.9
     apparent = data * 1.1
 
-    index = [pd.Timestamp('2010-01-01') + timedelta(seconds=sec)
+    index = [pd.Timestamp('2010-01-01') + timedelta(seconds=int(sec))
              for sec in secs]
     column_tuples = [('power', ac_type)
                      for ac_type in ['active', 'reactive', 'apparent']]
@@ -87,7 +87,7 @@ def create_random_df():
     N_PERIODS = 1E4
     rng = pd.date_range('2012-01-01', freq='S', periods=N_PERIODS)
     data = np.random.randint(
-        low=0, high=1000, size=(N_PERIODS, len(MEASUREMENTS)))
+        low=0, high=1000, size=(int(N_PERIODS), len(MEASUREMENTS)))
     return pd.DataFrame(data=data, index=rng, dtype=np.float32,
                         columns=measurement_columns(MEASUREMENTS))
 
