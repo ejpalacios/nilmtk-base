@@ -18,7 +18,7 @@ hmmlearn = "^0.2.8"
 PyYAML = "^6.0"
 matplotlib = "^3.7.1"
 jupyterlab = "^3.6.3"
-nilm-metadata = {path = "../nilm_metadata", develop = true}
+nilm-metadata = {git = "https://https://github.com/ejpalacios/nilm_metadata.git", rev = "master"}
 pytz = "^2023.3"
 
 
