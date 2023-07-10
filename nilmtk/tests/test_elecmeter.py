@@ -1,4 +1,5 @@
 import unittest
+import warnings
 from datetime import timedelta
 from os.path import join
 
@@ -59,7 +60,8 @@ class TestElecMeter(unittest.TestCase):
 
     def test_upstream_meter(self):
         meter1 = ElecMeter(metadata={"site_meter": True}, meter_id=METER_ID)
-        self.assertIsNone(meter1.upstream_meter())
+        with self.assertWarns(RuntimeWarning):
+            self.assertIsNone(meter1.upstream_meter())
         meter2 = ElecMeter(metadata={"submeter_of": 1}, meter_id=METER_ID2)
         self.assertEquals(meter2.upstream_meter(), meter1)
         meter3 = ElecMeter(metadata={"submeter_of": 2}, meter_id=METER_ID3)

@@ -68,7 +68,7 @@ def _apply_clustering_n_clusters(X, n_clusters):
     """
     from sklearn.cluster import KMeans
 
-    k_means = KMeans(init="k-means++", n_clusters=n_clusters)
+    k_means = KMeans(init="k-means++", n_clusters=n_clusters, n_init=10)
     k_means.fit(X)
     return k_means.labels_, k_means.cluster_centers_
 

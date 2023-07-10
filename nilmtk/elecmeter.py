@@ -1,3 +1,4 @@
+import logging
 from collections import namedtuple
 from copy import deepcopy
 from typing import Any, Dict
@@ -22,6 +23,8 @@ from .node import Node
 from .preprocessing import Clip
 from .stats import DropoutRate, GoodSections, TotalEnergy
 from .utils import capitalise_first_letter, flatten_2d_list
+
+LOGGER = logging.getLogger(__name__)
 
 ElecMeterID = namedtuple("ElecMeterID", ["instance", "building", "dataset"])
 
@@ -118,7 +121,8 @@ class ElecMeter(Hashable, Electric):
             if raise_warning:
                 warn(
                     "There is no meter upstream of this meter '{}' because"
-                    " it is a site meter.".format(self.identifier)
+                    " it is a site meter.".format(self.identifier),
+                    RuntimeWarning,
                 )
             return
 
@@ -431,11 +435,7 @@ class ElecMeter(Hashable, Electric):
         nilmtk.exceptions.MeasurementError if a measurement is specified
         which is not available.
         """
-        verbose = kwargs.get("verbose")
-        if verbose:
-            print()
-            print("ElecMeter.load")
-            print(self)
+        LOGGER.debug(f"ElecMeter.load \r{self}")
 
         if "sample_period" in kwargs:
             kwargs.setdefault("resample", True)
@@ -464,15 +464,11 @@ class ElecMeter(Hashable, Electric):
                 )
                 resample_kwargs.update({"limit": max_number_of_rows_to_ffill})
 
-        if verbose:
-            print("kwargs after setting resample setting:")
-            print(kwargs)
+        LOGGER.debug(f"kwargs after setting resample setting: {kwargs}")
 
         kwargs = self._prep_kwargs_for_sample_period_and_resample(**kwargs)
 
-        if verbose:
-            print("kwargs after processing")
-            print(kwargs)
+        LOGGER.debug(f"kwargs after processing: {kwargs}")
 
         # Get source node
         preprocessing = kwargs.pop("preprocessing", [])
@@ -701,7 +697,6 @@ class ElecMeter(Hashable, Electric):
         get_cached_stat
         """
         full_results = loader_kwargs.pop("full_results", False)
-        verbose = loader_kwargs.get("verbose")
         if "ac_type" in loader_kwargs or "physical_quantity" in loader_kwargs:
             loader_kwargs = self._convert_physical_quantity_and_ac_type_to_cols(
                 **loader_kwargs
@@ -745,8 +740,8 @@ class ElecMeter(Hashable, Electric):
         else:
             sections_to_compute = sections
 
-        if verbose and not results_obj._data.empty:
-            print("Using cached result.")
+        if not results_obj._data.empty:
+            LOGGER.debug("Using cached result.")
 
         # If we get to here then we have to compute some stats
         if sections_to_compute:
@@ -832,7 +827,7 @@ class ElecMeter(Hashable, Electric):
             self.building(), meter_str, stat_name
         )
 
-    def clear_cache(self, verbose=False):
+    def clear_cache(self):
         """
         See Also
         --------
@@ -845,10 +840,9 @@ class ElecMeter(Hashable, Electric):
         try:
             self.cache.remove(key_for_cache)
         except KeyError:
-            if verbose:
-                print("No existing cache for", key_for_cache)
+            LOGGER.debug(f"No existing cache for {key_for_cache}")
         else:
-            print("Removed", key_for_cache)
+            LOGGER.debug(f"Removed {key_for_cache}")
 
     def get_cached_stat(self, key_for_stat):
         """

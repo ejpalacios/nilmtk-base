@@ -13,8 +13,8 @@ class Apply(Node):
         self.check_requirements()
         for chunk in self.upstream.process():
             new_chunk = self.func(chunk)
-            new_chunk.timeframe = chunk.timeframe
+            new_chunk.attrs["timeframe"] = chunk.attrs["timeframe"]
             if hasattr(chunk, "look_ahead"):
-                new_chunk.look_ahead = chunk.look_ahead
+                new_chunk.attrs["look_ahead"] = chunk.attrs["look_ahead"]
             del chunk
             yield new_chunk

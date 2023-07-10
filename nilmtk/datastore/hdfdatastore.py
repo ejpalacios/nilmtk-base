@@ -1,3 +1,4 @@
+import logging
 import warnings
 from copy import deepcopy
 from os.path import isfile
@@ -11,22 +12,16 @@ from nilmtk.timeframegroup import TimeFrameGroup
 
 from .datastore import MAX_MEM_ALLOWANCE_IN_BYTES, DataStore
 
+LOGGER = logging.getLogger(__name__)
+
 
 class HDFDataStore(DataStore):
     def __init__(self, filename, mode="r"):
         if mode in ["r", "a"] and not isfile(filename):
             raise IOError("No such file as " + filename)
 
-        with warnings.catch_warnings():
-            # Silence pytables warnings with numpy, out of our control
-            warnings.filterwarnings(
-                "ignore",
-                category=RuntimeWarning,
-                message=".*numpy.ufunc size changed.*",
-            )
-
-            self.store = pd.HDFStore(filename, mode, complevel=9, complib="blosc")
-            super(HDFDataStore, self).__init__()
+        self.store = pd.HDFStore(filename, mode, complevel=9, complib="blosc")
+        super(HDFDataStore, self).__init__()
 
     @doc_inherit
     def __getitem__(self, key):
@@ -40,7 +35,6 @@ class HDFDataStore(DataStore):
         sections=None,
         n_look_ahead_rows=0,
         chunksize=MAX_MEM_ALLOWANCE_IN_BYTES,
-        verbose=False,
     ):
         # TODO: calculate chunksize default based on physical
         # memory installed and number of columns
@@ -65,24 +59,19 @@ class HDFDataStore(DataStore):
                 for pq, ac in columns
             ]
 
-        if verbose:
-            print(
-                "HDFDataStore.load(key='{}', columns='{}', sections='{}',"
-                " n_look_ahead_rows='{}', chunksize='{}')".format(
-                    key, columns, sections, n_look_ahead_rows, chunksize
-                )
-            )
+        LOGGER.debug(
+            f"HDFDataStore.load({key=}, {columns=}, {sections=}, {n_look_ahead_rows=}, {chunksize=})"
+        )
 
         self.all_sections_smaller_than_chunksize = True
 
         for section in sections:
-            if verbose:
-                print("   ", section)
+            LOGGER.debug(f"{section=}")
             window_intersect = self.window.intersection(section)
 
             if window_intersect.empty:
                 data = pd.DataFrame()
-                data.timeframe = section
+                data.attrs["timeframe"] = section
                 yield data
                 continue
 
@@ -92,7 +81,7 @@ class HDFDataStore(DataStore):
                 section_end_i = self.store.get_storer(key).nrows
                 if section_end_i <= 1:
                     data = pd.DataFrame()
-                    data.timeframe = section
+                    data.attrs["timeframe"] = section
                     yield data
                     continue
             else:
@@ -108,7 +97,7 @@ class HDFDataStore(DataStore):
                 n_coords = len(coords)
                 if n_coords == 0:
                     data = pd.DataFrame()
-                    data.timeframe = window_intersect
+                    data.attrs["timeframe"] = window_intersect
                     yield data
                     continue
 
@@ -162,9 +151,10 @@ class HDFDataStore(DataStore):
                             category=UserWarning,
                             message=".*Pandas doesn't allow columns.*",
                         )
-                        setattr(data, "look_ahead", look_ahead)
 
-                data.timeframe = _timeframe_for_chunk(
+                    data.attrs["look_ahead"] = look_ahead
+
+                data.attrs["timeframe"] = _timeframe_for_chunk(
                     there_are_more_subchunks, chunk_i, window_intersect, data.index
                 )
                 yield data

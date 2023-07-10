@@ -1,4 +1,5 @@
 import gc
+import logging
 import warnings
 from collections import Counter, namedtuple
 from copy import copy, deepcopy
@@ -41,7 +42,6 @@ from .utils import (
     most_common,
     nodes_adjacent_to_root,
     normalise_timestamp,
-    print_on_line,
     simplest_type_for,
     tree_root,
 )
@@ -50,6 +50,8 @@ from .utils import (
 # (we can't use a set because sets aren't hashable so we can't use
 # a set as a dict key or a DataFrame column name.)
 MeterGroupID = namedtuple("MeterGroupID", ["meters"])
+
+LOGGER = logging.getLogger(__name__)
 
 
 class MeterGroup(Electric):
@@ -310,11 +312,8 @@ class MeterGroup(Electric):
                 elif isinstance(meter.instance(), (tuple, list)):
                     if key in meter.instance():
                         if isinstance(meter, MeterGroup):
-                            print(
-                                "Meter",
-                                key,
-                                "is in a nested meter group."
-                                " Retrieving just the ElecMeter.",
+                            LOGGER.debug(
+                                f"Meter {key} is in a nested meter group. Retrieving just the ElecMeter.",
                             )
                             meters_found.append(meter[key])
                         else:
@@ -749,12 +748,11 @@ class MeterGroup(Electric):
             names=LEVEL_NAMES,
         )
         freq = "{:d}S".format(int(sample_period))
-        verbose = kwargs.get("verbose")
 
         # Check for empty sections
         sections = [section for section in sections if section]
         if not sections:
-            print("No sections to load.")
+            LOGGER.debug("No sections to load.")
             yield pd.DataFrame(columns=columns)
             return
 
@@ -931,7 +929,7 @@ class MeterGroup(Electric):
     def _collect_stats_on_all_meters(self, load_kwargs, func, full_results):
         collected_stats = []
         for meter in self.meters:
-            print_on_line("\rCalculating", func, "for", meter.identifier, "...   ")
+            LOGGER.debug(f"Calculating {func} for {meter.identifier}...")
             single_stat = getattr(meter, func)(full_results=full_results, **load_kwargs)
             collected_stats.append(single_stat)
             if (
@@ -1143,21 +1141,18 @@ class MeterGroup(Electric):
         -------
         float [0,1] or NaN if mains total_energy == 0
         """
-        print("Running MeterGroup.proportion_of_energy_submetered...")
+        LOGGER.debug("Running MeterGroup.proportion_of_energy_submetered...")
         mains = self.mains()
         downstream_meters = self.meters_directly_downstream_of_mains()
         proportion = 0.0
-        verbose = loader_kwargs.get("verbose")
         all_nan = True
         for m in downstream_meters.meters:
-            if verbose:
-                print("Calculating proportion for", m)
+            LOGGER.debug(f"Calculating proportion for {m}")
             prop = m.proportion_of_energy(mains, **loader_kwargs)
             if not np.isnan(prop):
                 proportion += prop
                 all_nan = False
-            if verbose:
-                print("   {:.2%}".format(prop))
+            LOGGER.debug(f"{prop=:.2f}")
 
         if all_nan:
             proportion = np.NaN
@@ -1226,7 +1221,7 @@ class MeterGroup(Electric):
         n_meters = len(self.meters)
         load_kwargs.setdefault("ac_type", "best")
         for i, meter in enumerate(self.meters):
-            print("\r{:d}/{:d} {}".format(i + 1, n_meters, meter), end="")
+            LOGGER.debug(f"\r{i+1}/{n_meters} {meter}")
             stdout.flush()
             if per_period is None:
                 meter_energy = meter.total_energy(**load_kwargs)
@@ -1295,10 +1290,7 @@ class MeterGroup(Electric):
         n_meters = len(self.meters)
         for i, meter in enumerate(self.meters):
             proportion = meter.proportion_of_upstream(**load_kwargs)
-            print(
-                "\r{:d}/{:d} {} = {:.3f}".format(i + 1, n_meters, meter, proportion),
-                end="",
-            )
+            LOGGER.debug(f"\r{i+1}/{n_meters} {meter} = {proportion:.3f}")
             stdout.flush()
             prop_per_meter[meter.identifier] = proportion
         prop_per_meter.sort_values(inplace=True, ascending=False)
@@ -1569,7 +1561,7 @@ class MeterGroup(Electric):
         label_kwargs=None,
         plot_kwargs=None,
         threshold=None,
-        **load_kwargs
+        **load_kwargs,
     ):
         """
         Parameters
@@ -1629,7 +1621,7 @@ class MeterGroup(Electric):
         label_func="instance",
         include_disabled_meters=True,
         load_kwargs=None,
-        **plot_kwargs
+        **plot_kwargs,
     ):
         """
         Parameters
@@ -1731,7 +1723,7 @@ class MeterGroup(Electric):
         plot_func,
         kwargs_per_meter=None,
         pretty_label=True,
-        **kwargs
+        **kwargs,
     ):
         """Create multiple subplots.
 
@@ -1799,7 +1791,7 @@ class MeterGroup(Electric):
             meter.clear_cache()
 
     def correlation_of_sum_of_submeters_with_mains(self, **load_kwargs):
-        print("Running MeterGroup.correlation_of_sum_of_submeters_with_mains...")
+        LOGGER.debug("Running MeterGroup.correlation_of_sum_of_submeters_with_mains...")
         submeters = self.meters_directly_downstream_of_mains()
         return self.mains().correlation(submeters, **load_kwargs)
 
@@ -1920,7 +1912,7 @@ def combine_chunks_from_generators(index, columns, meters, kwargs):
 
     # Go through each generator to try sum values together
     for meter in meters:
-        print_on_line("\rLoading data for meter", meter.identifier, "    ")
+        LOGGER.debug(f"Loading data for meter {meter.identifier}")
         kwargs_copy = deepcopy(kwargs)
         generator = meter.load(**kwargs_copy)
         try:
@@ -1932,13 +1924,15 @@ def combine_chunks_from_generators(index, columns, meters, kwargs):
         del kwargs_copy
         gc.collect()
 
-        if chunk_from_next_meter.empty or not chunk_from_next_meter.timeframe:
+        if chunk_from_next_meter.empty or not chunk_from_next_meter.attrs.get(
+            "timeframe", None
+        ):
             continue
 
         if timeframe is None:
-            timeframe = chunk_from_next_meter.timeframe
+            timeframe = chunk_from_next_meter.attrs["timeframe"]
         else:
-            timeframe = timeframe.union(chunk_from_next_meter.timeframe)
+            timeframe = timeframe.union(chunk_from_next_meter.attrs["timeframe"])
 
         # Add (in-place)
         for i, column_name in enumerate(columns):
@@ -1989,9 +1983,8 @@ def combine_chunks_from_generators(index, columns, meters, kwargs):
 
     del columns_to_average_counter
     gc.collect()
-    print()
-    print("Done loading data all meters for this chunk.")
-    cumulator.timeframe = timeframe
+    LOGGER.debug("Done loading data all meters for this chunk.")
+    cumulator.attrs["timeframe"] = timeframe
     return cumulator
 
 

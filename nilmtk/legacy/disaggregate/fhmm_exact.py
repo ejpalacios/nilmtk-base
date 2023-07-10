@@ -454,7 +454,7 @@ class FHMM(Disaggregator):
                 continue
 
             # Record metadata
-            timeframes.append(chunk.timeframe)
+            timeframes.append(chunk.attrs["timeframe"])
             measurement = chunk.name
 
             # Start disaggregation
@@ -532,7 +532,7 @@ class FHMM(Disaggregator):
                     continue
 
                 # Record metadata
-                timeframes.append(chunk.timeframe)
+                timeframes.append(chunk.attrs["timeframe"])
                 measurement = chunk.name
 
                 # Start disaggregation

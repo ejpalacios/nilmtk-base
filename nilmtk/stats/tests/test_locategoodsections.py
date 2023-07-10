@@ -89,8 +89,8 @@ class TestLocateGoodSections(unittest.TestCase):
         df = pd.DataFrame(
             data=np.random.randn(len(index), 3), index=index, columns=["a", "b", "c"]
         )
-        df.timeframe = TimeFrame(index[0], index[-1])
-        df.look_ahead = pd.DataFrame()
+        df.attrs["timeframe"] = TimeFrame(index[0], index[-1])
+        df.attrs["look_ahead"] = pd.DataFrame()
 
         locate = GoodSections()
         locate.results = GoodSectionsResults(MAX_SAMPLE_PERIOD)
@@ -113,15 +113,17 @@ class TestLocateGoodSections(unittest.TestCase):
         for split_point in [[4, 6, 9, 17], [4, 10, 12, 17]]:
             locate = GoodSections()
             locate.results = GoodSectionsResults(MAX_SAMPLE_PERIOD)
-            df.results = {}
+            df.attrs["results"] = {}
             prev_i = 0
             for j, i in enumerate(split_point):
                 cropped_df = df.iloc[prev_i:i]
-                cropped_df.timeframe = TimeFrame(timestamps[j], timestamps[j + 1])
+                cropped_df.attrs["timeframe"] = TimeFrame(
+                    timestamps[j], timestamps[j + 1]
+                )
                 try:
-                    cropped_df.look_ahead = df.iloc[i:]
+                    cropped_df.attrs["look_ahead"] = df.iloc[i:]
                 except IndexError:
-                    cropped_df.look_ahead = pd.DataFrame()
+                    cropped_df.attrs["look_ahead"] = pd.DataFrame()
                 prev_i = i
                 locate._process_chunk(cropped_df, metadata)
 

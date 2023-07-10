@@ -25,7 +25,7 @@ class TestFHMM(unittest.TestCase):
         fhmm.train(elec)
         mains = elec.mains()
         output = HDFDataStore("output.h5", "w")
-        fhmm.disaggregate(mains, output, sample_period=1)
+        fhmm.disaggregate(mains, output, sample_period=10)
 
         for meter in range(2, 4):
             df1 = output.store.get("/building1/elec/meter{}".format(meter))

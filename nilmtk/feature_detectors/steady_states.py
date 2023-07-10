@@ -289,7 +289,7 @@ def _apply_clustering(X, max_num_clusters):
     k_means_labels_unique = {}
     for n_clusters in range(1, max_num_clusters):
         try:
-            k_means = KMeans(init="k-means++", n_clusters=n_clusters)
+            k_means = KMeans(init="k-means++", n_clusters=n_clusters, n_init=10)
             k_means.fit(X)
             k_means_labels[n_clusters] = k_means.labels_
             k_means_cluster_centers[n_clusters] = k_means.cluster_centers_

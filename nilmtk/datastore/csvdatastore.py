@@ -64,63 +64,62 @@ class CSVDataStore(DataStore):
         for section in sections:
             window_intersect = self.window.intersection(section)
             header_rows = [0, 1]
-            text_file_reader = pd.read_csv(
+            with pd.read_csv(
                 file_path,
                 index_col=0,
                 header=header_rows,
                 parse_dates=True,
                 chunksize=chunksize,
-            )
+            ) as text_file_reader:
+                # iterate through all chunks in file
+                for chunk_idx, chunk in enumerate(text_file_reader):
+                    # filter dataframe by specified columns
+                    if columns:
+                        chunk = chunk[columns]
 
-            # iterate through all chunks in file
-            for chunk_idx, chunk in enumerate(text_file_reader):
-                # filter dataframe by specified columns
-                if columns:
-                    chunk = chunk[columns]
+                    # mask chunk by window and section intersect
+                    subchunk_idx = [True] * len(chunk)
+                    if window_intersect.start:
+                        subchunk_idx = np.logical_and(
+                            subchunk_idx, (chunk.index >= window_intersect.start)
+                        )
+                    if window_intersect.end:
+                        subchunk_idx = np.logical_and(
+                            subchunk_idx, (chunk.index < window_intersect.end)
+                        )
+                    if window_intersect.empty:
+                        subchunk_idx = [False] * len(chunk)
+                    subchunk = chunk[subchunk_idx]
 
-                # mask chunk by window and section intersect
-                subchunk_idx = [True] * len(chunk)
-                if window_intersect.start:
-                    subchunk_idx = np.logical_and(
-                        subchunk_idx, (chunk.index >= window_intersect.start)
-                    )
-                if window_intersect.end:
-                    subchunk_idx = np.logical_and(
-                        subchunk_idx, (chunk.index < window_intersect.end)
-                    )
-                if window_intersect.empty:
-                    subchunk_idx = [False] * len(chunk)
-                subchunk = chunk[subchunk_idx]
-
-                if len(subchunk) > 0:
-                    subchunk_end = np.max(np.nonzero(subchunk_idx))
-                    subchunk.timeframe = TimeFrame(
-                        subchunk.index[0], subchunk.index[-1]
-                    )
-                    # Load look ahead if necessary
-                    if n_look_ahead_rows > 0:
-                        if len(subchunk.index) > 0:
-                            rows_to_skip = (
-                                (len(header_rows) + 1)
-                                + (chunk_idx * chunksize)
-                                + subchunk_end
-                                + 1
-                            )
-                            try:
-                                subchunk.look_ahead = pd.read_csv(
-                                    file_path,
-                                    index_col=0,
-                                    header=None,
-                                    parse_dates=True,
-                                    skiprows=rows_to_skip,
-                                    nrows=n_look_ahead_rows,
+                    if len(subchunk) > 0:
+                        subchunk_end = np.max(np.nonzero(subchunk_idx))
+                        subchunk.attrs["timeframe"] = TimeFrame(
+                            subchunk.index[0], subchunk.index[-1]
+                        )
+                        if n_look_ahead_rows > 0:
+                            if len(subchunk.index) > 0:
+                                rows_to_skip = (
+                                    (len(header_rows) + 1)
+                                    + (chunk_idx * chunksize)
+                                    + subchunk_end
+                                    + 1
                                 )
-                            except ValueError:
-                                subchunk.look_ahead = pd.DataFrame()
-                        else:
-                            subchunk.look_ahead = pd.DataFrame()
+                                try:
+                                    subchunk.attrs["look_ahead"] = pd.read_csv(
+                                        file_path,
+                                        index_col=0,
+                                        header=None,
+                                        parse_dates=True,
+                                        skiprows=rows_to_skip,
+                                        nrows=n_look_ahead_rows,
+                                    )
+                                    print(f"{subchunk=}")
+                                except ValueError:
+                                    subchunk.attrs["look_ahead"] = pd.DataFrame()
+                            else:
+                                subchunk.attrs["look_ahead"] = pd.DataFrame()
 
-                    yield subchunk
+                        yield subchunk
 
     @doc_inherit
     def append(self, key, value):

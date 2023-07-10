@@ -27,10 +27,13 @@ class TestCO(unittest.TestCase):
         co.train(elec)
         mains = elec.mains()
 
-        pred = co.disaggregate_chunk(next(mains.load(sample_period=1)))
+        mains_data = next(mains.load(sample_period=10))
+
+        pred = co.disaggregate_chunk(mains_data)
         gt = {}
         for meter in elec.submeters().meters:
-            gt[meter] = next(meter.load(sample_period=1)).squeeze()
+            meter_data = next(meter.load(sample_period=10))
+            gt[meter] = meter_data.squeeze()
         gt = pd.DataFrame(gt)
         pred = pred[gt.columns]
         self.assertTrue(gt.equals(pred))

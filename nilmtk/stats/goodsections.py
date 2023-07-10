@@ -62,8 +62,8 @@ class GoodSections(Node):
         """
         # Retrieve relevant metadata
         max_sample_period = metadata["device"]["max_sample_period"]
-        look_ahead = getattr(df, "look_ahead", None)
-        timeframe = df.timeframe
+        look_ahead = df.attrs.get("look_ahead", None)
+        timeframe = df.attrs["timeframe"]
 
         # Process dataframe
         good_sections = get_good_sections(

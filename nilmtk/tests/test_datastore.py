@@ -43,9 +43,9 @@ class SuperTestDataStore(object):
         self.assertEqual(df.index[0], timeframe.start)
         self.assertEqual(df.index[-1], timeframe.end - timedelta(seconds=1))
         self.assertEqual(
-            df.look_ahead.index[0], timeframe.end
+            df.attrs["look_ahead"].index[0], timeframe.end
         )  # This test, for some odd reason, fails for CSVDataStore in Python3, intermittently.  Very odd.
-        self.assertEqual(len(df.look_ahead), 10)
+        self.assertEqual(len(df.attrs["look_ahead"]), 10)
 
     def test_load_chunks(self):
         self.datastore.window.clear()
@@ -96,11 +96,11 @@ class SuperTestDataStore(object):
         one_sec = timedelta(seconds=1)
 
         for i, chunk in enumerate(chunks):
-            self.assertEqual(chunk.index[0], chunk.timeframe.start)
+            self.assertEqual(chunk.index[0], chunk.attrs["timeframe"].start)
             self.assertTrue(
-                (chunk.timeframe.end - one_sec)
+                (chunk.attrs["timeframe"].end - one_sec)
                 <= chunk.index[-1]
-                <= chunk.timeframe.end
+                <= chunk.attrs["timeframe"].end
             )
 
     # --------- helper functions ---------------------#

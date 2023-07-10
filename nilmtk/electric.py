@@ -6,7 +6,6 @@ from warnings import warn
 
 import matplotlib.pyplot as plt
 import numpy as np
-import numpy.random as nr
 import pandas as pd
 import pytz
 import scipy.spatial as ss
@@ -539,7 +538,7 @@ class Electric(object):
             N = len(z)
             # small noise to break degeneracy, see doc.
             intens = 1e-10
-            z = [list(p + intens * nr.rand(len(z[0]))) for p in z]
+            z = [list(p + intens * np.random.rand(len(z[0]))) for p in z]
             tree = ss.cKDTree(z)
             nn = [tree.query(point, k + 1, p=float("inf"))[0][k] for point in z]
             const = digamma(N) - digamma(k) + d * log(2)
@@ -572,8 +571,8 @@ class Electric(object):
 
         def kdtree_mi(x, y, k, base):
             intens = 1e-10  # small noise to break degeneracy, see doc.
-            x = [list(p + intens * nr.rand(len(x[0]))) for p in x]
-            y = [list(p + intens * nr.rand(len(y[0]))) for p in y]
+            x = [list(p + intens * np.random.rand(len(x[0]))) for p in x]
+            y = [list(p + intens * np.random.rand(len(y[0]))) for p in y]
             points = zip2(x, y)
             # Find nearest neighbors in joint space, p=inf means max-norm
             tree = ss.cKDTree(points)
@@ -668,8 +667,8 @@ class Electric(object):
             chunk_to_yield = chunk[physical_quantity].sum(axis=1, skipna=False)
             ac_types = "+".join(chunk[physical_quantity].columns)
             chunk_to_yield.name = (physical_quantity, ac_types)
-            chunk_to_yield.timeframe = getattr(chunk, "timeframe", None)
-            chunk_to_yield.look_ahead = getattr(chunk, "look_ahead", None)
+            chunk_to_yield.attrs["timeframe"] = chunk.attrs.get("timeframe", None)
+            chunk_to_yield.attrs["look_ahead"] = chunk.attrs.get("look_ahead", None)
             yield chunk_to_yield
 
     def power_series(self, **kwargs):
