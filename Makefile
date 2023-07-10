@@ -5,8 +5,11 @@ isort:
 black:
 	poetry run black nilmtk --check
 
+install-stubs:
+	poetry run mypy --install-types --non-interactive nilmtk
+
 mypy:
-	poetry run mypy nilmtk
+	poetry run mypy --no-incremental nilmtk
 
 test:
 	poetry run nosetests -v

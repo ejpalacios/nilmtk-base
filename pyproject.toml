@@ -45,21 +45,15 @@ omit = [
     "*nilmtk/notebooks/*"
 ]
 
+# Fix warnings for libraries without stubs
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
 module = [
-    "python",
-    "pandas",
-    "pandas.*",
-    "numpy",
     "networkx",
     "scipy.*",
-    "tables.*",
     "sklearn.*",
-    "yaml",
     "matplotlib.*",
     "mpl_toolkits.*",
-    "jupyterlab",
     "nilm_metadata.*",
     "pytz",
 ]
