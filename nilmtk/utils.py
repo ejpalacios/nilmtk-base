@@ -11,7 +11,6 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import pytz
-from IPython.core.display import HTML, display
 from sklearn.metrics import mean_squared_error
 
 from nilmtk.datastore import CSVDataStore, HDFDataStore
@@ -254,7 +253,7 @@ def dict_to_html(dictionary):
 
 def print_dict(dictionary):
     html = dict_to_html(dictionary)
-    display(HTML(html))
+    print(html)
 
 
 def offset_alias_to_seconds(alias):

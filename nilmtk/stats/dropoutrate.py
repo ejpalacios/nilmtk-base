@@ -1,8 +1,9 @@
 import numpy as np
 
-from ..exceptions import TooFewSamplesError
-from ..node import Node
-from ..utils import get_index
+from nilmtk.exceptions import TooFewSamplesError
+from nilmtk.node import Node
+from nilmtk.utils import get_index
+
 from .dropoutrateresults import DropoutRateResults
 
 

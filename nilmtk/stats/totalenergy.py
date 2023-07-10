@@ -2,11 +2,12 @@ import gc
 
 import numpy as np
 
-from ..consts import JOULES_PER_KWH
-from ..measurement import AC_TYPES
-from ..node import Node
-from ..timeframe import TimeFrame
-from ..utils import timedelta64_to_secs
+from nilmtk.consts import JOULES_PER_KWH
+from nilmtk.measurement import AC_TYPES
+from nilmtk.node import Node
+from nilmtk.timeframe import TimeFrame
+from nilmtk.utils import timedelta64_to_secs
+
 from .totalenergyresults import TotalEnergyResults
 
 

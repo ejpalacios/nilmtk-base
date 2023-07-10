@@ -8,10 +8,11 @@ import numpy as np
 import pandas as pd
 
 import nilmtk
-from nilmtk.exceptions import MeasurementError
-from nilmtk.timeframegroup import TimeFrameGroup
+from nilmtk.preprocessing import Clip
+from nilmtk.stats import DropoutRate, GoodSections, TotalEnergy
 
 from .electric import Electric
+from .exceptions import MeasurementError
 from .hashable import Hashable
 from .measurement import (
     PHYSICAL_QUANTITIES,
@@ -20,8 +21,7 @@ from .measurement import (
     select_best_ac_type,
 )
 from .node import Node
-from .preprocessing import Clip
-from .stats import DropoutRate, GoodSections, TotalEnergy
+from .timeframegroup import TimeFrameGroup
 from .utils import capitalise_first_letter, flatten_2d_list
 
 LOGGER = logging.getLogger(__name__)

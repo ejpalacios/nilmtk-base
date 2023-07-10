@@ -2,7 +2,7 @@ from warnings import warn
 
 import pandas as pd
 
-from nilmtk.exceptions import MeasurementError
+from .exceptions import MeasurementError
 
 AC_TYPES = ["active", "apparent", "reactive"]
 # AC is short for 'Alternating Current'.

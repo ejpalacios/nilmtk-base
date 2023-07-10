@@ -1,4 +1,4 @@
-from ..node import Node
+from nilmtk.node import Node
 
 
 class Apply(Node):

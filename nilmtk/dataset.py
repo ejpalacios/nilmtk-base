@@ -6,8 +6,9 @@ import numpy as np
 import pandas as pd
 from matplotlib.dates import DateFormatter
 
+from nilmtk.datastore.datastore import join_key
+
 from .building import Building
-from .datastore.datastore import join_key
 from .timeframe import TimeFrame
 from .utils import get_datastore
 

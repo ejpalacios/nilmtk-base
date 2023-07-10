@@ -3,9 +3,8 @@ import copy
 
 import pandas as pd
 
-from nilmtk.utils import get_tz, tz_localize_naive
-
 from .timeframe import TimeFrame
+from .utils import get_tz, tz_localize_naive
 
 
 class Results(object):

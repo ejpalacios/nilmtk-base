@@ -12,13 +12,18 @@ import pandas as pd
 import yaml
 from nilm_metadata.convert_yaml_to_hdf5 import _load_file
 
-from nilmtk.datastore import MAX_MEM_ALLOWANCE_IN_BYTES, DataStore
-from nilmtk.datastore.datastore import join_key, write_yaml_to_file
-from nilmtk.datastore.key import Key
 from nilmtk.docinherit import doc_inherit
 from nilmtk.node import Node
 from nilmtk.timeframe import TimeFrame
 from nilmtk.timeframegroup import TimeFrameGroup
+
+from .datastore import (
+    MAX_MEM_ALLOWANCE_IN_BYTES,
+    DataStore,
+    join_key,
+    write_yaml_to_file,
+)
+from .key import Key
 
 
 class CSVDataStore(DataStore):
@@ -102,7 +107,7 @@ class CSVDataStore(DataStore):
                                     (len(header_rows) + 1)
                                     + (chunk_idx * chunksize)
                                     + subchunk_end
-                                    + 1
+                                    + 1  # TODO: This fails sometimes
                                 )
                                 try:
                                     subchunk.attrs["look_ahead"] = pd.read_csv(
@@ -113,7 +118,6 @@ class CSVDataStore(DataStore):
                                         skiprows=rows_to_skip,
                                         nrows=n_look_ahead_rows,
                                     )
-                                    print(f"{subchunk=}")
                                 except ValueError:
                                     subchunk.attrs["look_ahead"] = pd.DataFrame()
                             else:

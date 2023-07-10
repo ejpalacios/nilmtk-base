@@ -2,7 +2,8 @@ from collections import OrderedDict, namedtuple
 
 import pandas as pd
 
-from .datastore.datastore import join_key
+from nilmtk.datastore.datastore import join_key
+
 from .hashable import Hashable
 from .metergroup import MeterGroup
 

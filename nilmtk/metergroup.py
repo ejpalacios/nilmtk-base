@@ -14,16 +14,16 @@ from matplotlib import MatplotlibDeprecationWarning
 from matplotlib.sankey import Sankey
 from matplotlib.ticker import FuncFormatter
 
-from nilmtk.exceptions import MeasurementError
-from nilmtk.timeframegroup import TimeFrameGroup
+from nilmtk.datastore import MAX_MEM_ALLOWANCE_IN_BYTES
+from nilmtk.datastore.datastore import join_key
+from nilmtk.preprocessing import Apply
 
 from .appliance import Appliance
-from .datastore import MAX_MEM_ALLOWANCE_IN_BYTES
-from .datastore.datastore import join_key
 
 # NILMTK imports
 from .elecmeter import ElecMeter, ElecMeterID
 from .electric import Electric
+from .exceptions import MeasurementError
 from .measurement import (
     AC_TYPES,
     LEVEL_NAMES,
@@ -31,8 +31,8 @@ from .measurement import (
     select_best_ac_type,
 )
 from .plots import plot_series
-from .preprocessing import Apply
 from .timeframe import TimeFrame, split_timeframes
+from .timeframegroup import TimeFrameGroup
 from .utils import (
     append_or_extend_list,
     capitalise_first_letter,

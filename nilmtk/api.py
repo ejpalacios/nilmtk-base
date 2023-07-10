@@ -3,7 +3,6 @@ import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from IPython.display import clear_output
 
 from nilmtk.dataset import DataSet
 from nilmtk.losses import *
@@ -92,7 +91,6 @@ class API:
                 self.train_jointly(clf, d)
 
             print("Finished training for ", clf.MODEL_NAME)
-            clear_output()
 
         d = self.test_datasets_dict
 
