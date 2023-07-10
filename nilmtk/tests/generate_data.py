@@ -122,11 +122,7 @@ def add_building_metadata(store, elec_meters):
     appliances = []
     for key, value in elec_meters.items():
         if key != 1:
-            appliance = {
-                "instance": key - 1,
-                "meters": [key],
-                "type": "appliance"
-            }
+            appliance = {"instance": key - 1, "meters": [key], "type": "appliance"}
             appliances.append(appliance)
     md = {"instance": 1, "elec_meters": elec_meters, "appliances": appliances}
     node._f_setattr("metadata", md)
@@ -138,7 +134,7 @@ def create_co_test_hdf5():
     N_METERS = 3
     chunk = 1000
     N_PERIODS = 4 * chunk
-    rng = pd.date_range("2012-01-01", freq="S", periods=N_PERIODS)
+    rng = pd.date_range("2012-01-01", freq="10S", periods=N_PERIODS)
 
     dfs = OrderedDict()
     data = OrderedDict()
