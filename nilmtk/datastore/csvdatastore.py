@@ -20,7 +20,6 @@ from nilmtk.docinherit import doc_inherit
 
 class CSVDataStore(DataStore):
 
-    @doc_inherit
     def __init__(self, filename):
 
         self.filename = filename

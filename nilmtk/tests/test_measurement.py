@@ -5,7 +5,7 @@ import nilmtk.measurement as measure
 from nilmtk.elecmeter import ElecMeter, ElecMeterID
 from nilmtk.exceptions import MeasurementError
 
-BAD_AC_TYPES = ['foo', '', None, True, {'a':'b'}, 
+BAD_AC_TYPES: list = ['foo', '', None, True, {'a':'b'}, 
                 (1,2), [], ['reactive'], 'reaactive']
 
 class TestMeasurement(unittest.TestCase):

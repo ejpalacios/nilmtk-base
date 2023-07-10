@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import Dict, Any, Optional, Type
 from nilm_metadata import recursively_update_dict
 
 class Node(object):
@@ -7,9 +8,9 @@ class Node(object):
     (or, later, maybe NILM training or disaggregation).
     """
 
-    requirements = {}
-    postconditions = {}
-    results_class = None
+    requirements: Dict[str, Any] = {}
+    postconditions: Dict[str, Any] = {}
+    results_class: Optional[Type]= None
 
     def __init__(self, upstream=None, generator=None):
         """

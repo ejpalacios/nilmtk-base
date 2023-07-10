@@ -15,6 +15,8 @@ from .utils import flatten_2d_list, capitalise_first_letter
 from nilmtk.timeframegroup import TimeFrameGroup
 import nilmtk
 
+from typing import Dict, Any
+
 ElecMeterID = namedtuple('ElecMeterID', ['instance', 'building', 'dataset'])
 
 
@@ -45,7 +47,7 @@ class ElecMeter(Hashable, Electric):
         See http://nilm-metadata.readthedocs.org/en/latest/dataset_metadata.html#meterdevice
     """
 
-    meter_devices = {}
+    meter_devices: Dict[str, Any] = {}
 
     def __init__(self, store=None, metadata=None, meter_id=None):
         # Store and check parameters

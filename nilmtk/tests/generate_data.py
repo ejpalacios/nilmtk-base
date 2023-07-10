@@ -8,6 +8,7 @@ import numpy as np
 from nilmtk.consts import JOULES_PER_KWH
 from nilmtk.measurement import measurement_columns, AC_TYPES
 from nilmtk.utils import flatten_2d_list
+from typing import Dict
 
 MAX_SAMPLE_PERIOD = 15
 
@@ -92,7 +93,7 @@ def create_random_df():
                         columns=measurement_columns(MEASUREMENTS))
 
 
-TEST_METER = {'manufacturer': 'Test Manufacturer',
+TEST_METER: Dict = {'manufacturer': 'Test Manufacturer',
               'model': 'Random Meter',
               'sample_period': 10,
               'max_sample_period': MAX_SAMPLE_PERIOD,

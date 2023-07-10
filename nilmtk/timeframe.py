@@ -64,15 +64,6 @@ class TimeFrame(object):
         if self.enabled:
             return self._start
 
-    @property
-    def end(self):
-        if self.enabled:
-            return self._end
-
-    @property
-    def empty(self):
-        return self._empty
-
     @start.setter
     def start(self, new_start):
         new_start = convert_nat_to_none(new_start)
@@ -85,6 +76,11 @@ class TimeFrame(object):
         else:
             self._start = new_start
 
+    @property
+    def end(self):
+        if self.enabled:
+            return self._end
+
     @end.setter
     def end(self, new_end):
         new_end = convert_nat_to_none(new_end)
@@ -96,6 +92,10 @@ class TimeFrame(object):
             raise ValueError("end date must be after start date")
         else:
             self._end = new_end
+
+    @property
+    def empty(self):
+        return self._empty
 
     def adjacent(self, other, gap=0):
         """Returns True if self.start == other.end or visa versa.

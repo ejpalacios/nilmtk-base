@@ -2,7 +2,7 @@ import unittest
 from os.path import join
 import pandas as pd
 from datetime import timedelta
-from .testingtools import data_dir, WarningTestMixin
+from .testingtools import data_dir
 from ..datastore import HDFDataStore
 from ..elecmeter import ElecMeter, ElecMeterID
 from ..stats.tests.test_totalenergy import check_energy_numbers
@@ -11,7 +11,7 @@ METER_ID = ElecMeterID(instance=1, building=1, dataset='REDD')
 METER_ID2 = ElecMeterID(instance=2, building=1, dataset='REDD')
 METER_ID3 = ElecMeterID(instance=3, building=1, dataset='REDD')
 
-class TestElecMeter(WarningTestMixin, unittest.TestCase):
+class TestElecMeter(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):

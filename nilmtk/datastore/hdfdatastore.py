@@ -12,7 +12,6 @@ from nilmtk.docinherit import doc_inherit
 
 class HDFDataStore(DataStore):
 
-    @doc_inherit
     def __init__(self, filename, mode="r"):
         if mode in [ "r", "a" ] and not isfile(filename):
             raise IOError("No such file as " + filename)

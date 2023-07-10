@@ -4,6 +4,7 @@ from copy import deepcopy
 from .hashable import Hashable
 from .utils import flatten_2d_list
 from nilm_metadata import get_appliance_types
+from typing import Dict, Any
 
 ApplianceID = namedtuple('ApplianceID', ['type', 'instance'])
 DEFAULT_ON_POWER_THRESHOLD = 10
@@ -20,7 +21,7 @@ class Appliance(Hashable):
 
     #: Static (AKA class) variable. Maps from appliance_type (string) to a dict
     #: describing metadata about each appliance type.
-    appliance_types = {}
+    appliance_types: Dict[str, Any] = {}
 
     #: Static variable.  Controls whether Appliance.matches() allows synonyms
     #: for appliance type names.

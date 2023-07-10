@@ -28,6 +28,7 @@ import inspect
 
 
 from functools import wraps
+from typing import  Any, Callable, cast
 
 
 class DocInherit(object):
@@ -41,7 +42,7 @@ class DocInherit(object):
         self.mthd = mthd
         self.name = mthd.__name__
 
-    def __get__(self, obj, cls):
+    def __get__(self, obj, cls) -> Callable[...,Any]:
         for parent in cls.__mro__[1:]:
             overridden = getattr(parent, self.name, None)
             if overridden:
@@ -56,7 +57,7 @@ class DocInherit(object):
 
         doc = inspect.getdoc(overridden)
         f.__doc__ = doc
-        return f
+        return cast(Callable[...,Any], f)
 
 
 doc_inherit = DocInherit
