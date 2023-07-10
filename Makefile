@@ -11,4 +11,4 @@ mypy:
 test:
 	poetry run nosetests -v
 
-local-ci: isort black mypy
+local-ci: isort black mypy test
