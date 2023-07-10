@@ -15,7 +15,7 @@ scipy = "^1.11.1"
 tables = "^3.8.0"
 scikit-learn = "^1.3.0"
 PyYAML = "^6.0"
-nilm-metadata = {git = "https://https://github.com/ejpalacios/nilm_metadata.git", rev = "master"}
+nilm-metadata = {git = "ssh://git@gitlab.esat.kuleuven.be/premises/nilmtk-metadata.git", branch = "main"}
 pytz = "^2023.3"
 
 
@@ -34,6 +34,16 @@ mypy = "^1.4.1"
 [tool.isort]
 profile = "black"
 skip = ["__init__.py"]
+
+[tool.coverage.run]
+source = ["nilmtk"]
+
+[tool.coverage.report]
+omit = [ 
+    "*/python?.?/*",
+    "*/site-packages/nose/*",
+    "*nilmtk/notebooks/*"
+]
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true

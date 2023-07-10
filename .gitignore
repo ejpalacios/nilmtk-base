@@ -20,6 +20,9 @@ notebooks/*.h5
 # Ignoring Local datasets: 
 ./data
 
+# Ignore coverage files
+.coverage
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

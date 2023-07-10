@@ -1838,8 +1838,8 @@ six = "*"
 
 [package.source]
 type = "git"
-url = "https://https://github.com/ejpalacios/nilm_metadata.git"
-reference = "master"
+url = "ssh://git@gitlab.esat.kuleuven.be/premises/nilmtk-metadata.git"
+reference = "main"
 resolved_reference = "a0758b6075d584ffcd50e5ca7d3c900e991d5cf1"
 
 [[package]]
@@ -3162,4 +3162,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "0d805e8d7e8e5f74edadda2032cd44d9a34ae559ea878828d8cf6d9a82402976"
+content-hash = "132a7911620f289da89803cb48dff8b892cdceab6b2c962397676d37b7e06f28"

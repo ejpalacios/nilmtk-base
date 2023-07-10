@@ -11,4 +11,7 @@ mypy:
 test:
 	poetry run nosetests -v
 
-local-ci: isort black mypy test
+test-coverage:
+	poetry run nosetests --with-coverage
+
+local-ci: isort black mypy test-coverage
