@@ -56,8 +56,9 @@ class TimeFrame(object):
         def key_to_timestamp(key):
             string = d.get(key)
             return None if string is None else pd.Timestamp(string)
-        start = key_to_timestamp('start')
-        end = key_to_timestamp('end')
+
+        start = key_to_timestamp("start")
+        end = key_to_timestamp("end")
         return cls(start, end)
 
     @property
@@ -116,8 +117,10 @@ class TimeFrame(object):
         if self.empty or other.empty:
             return False
 
-        return (other.start - gap_td <= self.end <= other.start or
-                self.start - gap_td <= other.end <= self.start)
+        return (
+            other.start - gap_td <= self.end <= other.start
+            or self.start - gap_td <= other.end <= self.start
+        )
 
     def union(self, other):
         """Return a single TimeFrame combining self and other."""
@@ -181,15 +184,16 @@ class TimeFrame(object):
         intersect.include_end = include_end
         return intersect
 
-    def query_terms(self, variable_name='timeframe'):
+    def query_terms(self, variable_name="timeframe"):
         if self.empty:
             raise Exception("TimeFrame is empty.")
         terms = []
         if self.start is not None:
             terms.append("index>=" + variable_name + ".start")
         if self.end is not None:
-            terms.append("index<" + ("=" if self.include_end else "")
-                         + variable_name + ".end")
+            terms.append(
+                "index<" + ("=" if self.include_end else "") + variable_name + ".end"
+            )
         return None if terms == [] else terms
 
     def slice(self, frame):
@@ -205,11 +209,9 @@ class TimeFrame(object):
         """
         if not self.empty:
             if self.include_end:
-                sliced = frame[(frame.index >= self.start) &
-                               (frame.index <= self.end)]
+                sliced = frame[(frame.index >= self.start) & (frame.index <= self.end)]
             else:
-                sliced = frame[(frame.index >= self.start) &
-                               (frame.index < self.end)]
+                sliced = frame[(frame.index >= self.start) & (frame.index < self.end)]
         sliced.timeframe = self
         return sliced
 
@@ -220,13 +222,16 @@ class TimeFrame(object):
             return (self.start is not None) or (self.end is not None)
 
     def __repr__(self):
-        return ("TimeFrame(start='{}', end='{}', empty={})"
-                .format(self.start, self.end, self.empty))
+        return "TimeFrame(start='{}', end='{}', empty={})".format(
+            self.start, self.end, self.empty
+        )
 
     def __eq__(self, other):
-        return ((other.start == self.start) and
-                (other.end == self.end) and
-                (other.empty == self.empty))
+        return (
+            (other.start == self.start)
+            and (other.end == self.end)
+            and (other.empty == self.empty)
+        )
 
     def __lt__(self, other):
         if self.start is None and other.start is not None:
@@ -241,26 +246,31 @@ class TimeFrame(object):
     def to_dict(self):
         dct = {}
         if self.start:
-            dct['start'] = self.start.isoformat()
+            dct["start"] = self.start.isoformat()
         if self.end:
-            dct['end'] = self.end.isoformat()
+            dct["end"] = self.end.isoformat()
         return dct
 
     def check_tz(self):
-        if any([isinstance(tf.tz, pytz._FixedOffset)
+        if any(
+            [
+                isinstance(tf.tz, pytz._FixedOffset)
                 for tf in [self.start, self.end]
-                if tf is not None]):
-            warn("Using a pytz._FixedOffset timezone may cause issues"
-                 " (e.g. might cause Pandas to raise 'TypeError: too many"
-                 " timezones in this block, create separate data columns'). "
-                 " It is better to set the timezone to a geographical location"
-                 " e.g. 'Europe/London'.")
+                if tf is not None
+            ]
+        ):
+            warn(
+                "Using a pytz._FixedOffset timezone may cause issues"
+                " (e.g. might cause Pandas to raise 'TypeError: too many"
+                " timezones in this block, create separate data columns'). "
+                " It is better to set the timezone to a geographical location"
+                " e.g. 'Europe/London'."
+            )
 
     def check_for_overlap(self, other):
         intersect = self.intersection(other)
         if not intersect.empty:
-            raise ValueError("Periods overlap: " + str(self) +
-                             " " + str(other))
+            raise ValueError("Periods overlap: " + str(self) + " " + str(other))
 
     def split(self, duration_threshold):
         """Splits this TimeFrame into smaller adjacent TimeFrames no
@@ -275,8 +285,7 @@ class TimeFrame(object):
         generator of new TimeFrame objects
         """
         if not self:
-            raise ValueError("Cannot split a TimeFrame if `start` or `end`"
-                             " is None")
+            raise ValueError("Cannot split a TimeFrame if `start` or `end`" " is None")
 
         if duration_threshold >= self.timedelta.total_seconds():
             yield self

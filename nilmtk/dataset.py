@@ -29,7 +29,7 @@ class DataSet(object):
         See nilm-metadata.readthedocs.org/en/latest/dataset_metadata.html#dataset
     """
 
-    def __init__(self, filename=None, format='HDF'):
+    def __init__(self, filename=None, format="HDF"):
         """
         Parameters
         ----------
@@ -59,16 +59,15 @@ class DataSet(object):
 
     def save(self, destination):
         for b_id, building in self.buildings.items():
-            building.save(destination, '/building' + str(b_id))
+            building.save(destination, "/building" + str(b_id))
 
     def _init_buildings(self, store):
-        buildings = store.elements_below_key('/')
+        buildings = store.elements_below_key("/")
         buildings.sort()
 
         for b_key in buildings:
             building = Building()
-            building.import_metadata(
-                store, '/'+b_key, self.metadata.get('name'))
+            building.import_metadata(store, "/" + b_key, self.metadata.get("name"))
             self.buildings[building.identifier.instance] = building
 
     def set_window(self, start=None, end=None):
@@ -82,7 +81,7 @@ class DataSet(object):
         if self.store is None:
             raise RuntimeError("You need to set self.store first!")
 
-        tz = self.metadata.get('timezone')
+        tz = self.metadata.get("timezone")
         if tz is None:
             raise RuntimeError("'timezone' is not set in dataset metadata.")
 
@@ -112,25 +111,21 @@ class DataSet(object):
         """
         n = len(self.buildings)
         if axes is None:
-            n_meters_per_building = [len(elec.all_meters())
-                                     for elec in self.elecs()]
+            n_meters_per_building = [len(elec.all_meters()) for elec in self.elecs()]
             gridspec_kw = dict(height_ratios=n_meters_per_building)
-            fig, axes = plt.subplots(
-                n, 1, sharex=True, gridspec_kw=gridspec_kw)
+            fig, axes = plt.subplots(n, 1, sharex=True, gridspec_kw=gridspec_kw)
 
         assert n == len(axes)
         for i, (ax, elec) in enumerate(zip(axes, self.elecs())):
-            elec.plot_good_sections(ax=ax, label_func=label_func, gap=gap,
-                                    **kwargs)
-            ax.set_title('House {}'.format(elec.building()), y=0.4, va='top')
+            elec.plot_good_sections(ax=ax, label_func=label_func, gap=gap, **kwargs)
+            ax.set_title("House {}".format(elec.building()), y=0.4, va="top")
             ax.grid(False)
             for spine in ax.spines.values():
                 spine.set_linewidth(0.5)
             if i == n // 2:
-                ax.set_ylabel('Meter', rotation=0,
-                              ha='center', va='center', y=.4)
+                ax.set_ylabel("Meter", rotation=0, ha="center", va="center", y=0.4)
 
-        ax.set_xlabel('Date')
+        ax.set_xlabel("Date")
 
         plt.tight_layout()
         plt.subplots_adjust(hspace=0.05)
@@ -153,7 +148,7 @@ class DataSet(object):
 
         for ax, elec in zip(axes, self.elecs()):
             ax = elec.mains().plot_power_histogram(ax=ax, **kwargs)
-            ax.set_title('House {}'.format(elec.building()))
+            ax.set_title("House {}".format(elec.building()))
         return axes
 
     def get_activity_script(self, filename):
@@ -177,18 +172,18 @@ class DataSet(object):
             The full filename, including path and suffix, for the HDF5 file
             for storing the activity script.
         """
-        store = pd.HDFStore(
-            filename, mode='w', complevel=9, complib='blosc')
+        store = pd.HDFStore(filename, mode="w", complevel=9, complib="blosc")
 
         for building in self.buildings.values():
             submeters = building.elec.submeters().meters
 
             for meter in submeters:
                 appliance = meter.dominant_appliance()
-                key = '/building{:d}/{:s}__{:d}'.format(
+                key = "/building{:d}/{:s}__{:d}".format(
                     building.identifier.instance,
-                    appliance.identifier.type.replace(' ', '_'),
-                    appliance.identifier.instance)
+                    appliance.identifier.type.replace(" ", "_"),
+                    appliance.identifier.instance,
+                )
                 print("Computing activations for", key)
 
                 activations = meter.get_activations()

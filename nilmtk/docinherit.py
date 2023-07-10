@@ -40,13 +40,13 @@ class DocInherit(object):
         self.mthd = mthd
         self.name = mthd.__name__
 
-    def __get__(self, obj, cls) -> Callable[...,Any]:
+    def __get__(self, obj, cls) -> Callable[..., Any]:
         for parent in cls.__mro__[1:]:
             overridden = getattr(parent, self.name, None)
             if overridden:
                 break
 
-        @wraps(self.mthd, assigned=('__name__', '__module__'))
+        @wraps(self.mthd, assigned=("__name__", "__module__"))
         def f(*args, **kwargs):
             if obj:
                 return self.mthd(obj, *args, **kwargs)
@@ -55,8 +55,7 @@ class DocInherit(object):
 
         doc = inspect.getdoc(overridden)
         f.__doc__ = doc
-        return cast(Callable[...,Any], f)
+        return cast(Callable[..., Any], f)
 
 
 doc_inherit = DocInherit
-

@@ -33,8 +33,7 @@ def convert_hipe(hipe_path, output_filename, format="HDF"):
 
     datastore = get_datastore(output_filename, format, mode="w")
 
-    _convert(hipe_path, datastore,
-             _hipe_measurement_mapping_func, "Europe/Berlin")
+    _convert(hipe_path, datastore, _hipe_measurement_mapping_func, "Europe/Berlin")
 
     metadata_path = "metadata"
 
@@ -46,14 +45,16 @@ def convert_hipe(hipe_path, output_filename, format="HDF"):
 
 
 def _hipe_measurement_mapping_func(chan_id):
-    return 'apparent' if chan_id < 2 else 'active'
+    return "apparent" if chan_id < 2 else "active"
 
 
-def _convert(input_path,
-             data_store,
-             measurement_mapping_func,
-             sort_index=True,
-             drop_duplicates=False):
+def _convert(
+    input_path,
+    data_store,
+    measurement_mapping_func,
+    sort_index=True,
+    drop_duplicates=False,
+):
     meter_to_machine = {
         1: "MainTerminal",
         2: "ChipPress",
@@ -77,10 +78,12 @@ def _convert(input_path,
         stdout.flush()
         key = Key(building=1, meter=chan_id)
         measurements = measurement_mapping_func(chan_id)
-        df = _load_csv(filename,
-                       measurements,
-                       sort_index=sort_index,
-                       drop_duplicates=drop_duplicates)
+        df = _load_csv(
+            filename,
+            measurements,
+            sort_index=sort_index,
+            drop_duplicates=drop_duplicates,
+        )
 
         data_store.put(str(key), df)
     print()
@@ -111,7 +114,7 @@ def _load_csv(filename, measurements, drop_duplicates=False, sort_index=False):
         df = df.sort_index()
 
     if drop_duplicates:
-        dups_in_index = df.index.duplicated(keep='first')
+        dups_in_index = df.index.duplicated(keep="first")
         if dups_in_index.any():
             df = df[~dups_in_index]
     return df.abs()  # only positive loads

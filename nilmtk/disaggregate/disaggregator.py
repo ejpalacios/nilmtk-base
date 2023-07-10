@@ -18,12 +18,12 @@ class Disaggregator(object):
         A short name for this type of model.
         e.g. 'CO' for combinatorial optimisation.
     """
-    
+
     # file_prefix is used to track temporary files
     file_prefix = None
 
     def partial_fit(self, train_mains, train_appliances, **load_kwargs):
-        """ Trains the model given a metergroup containing appliance meters
+        """Trains the model given a metergroup containing appliance meters
         (supervised) or a site meter (unsupervised).  Will have a
         default implementation in super class.
         train_main: list of pd.DataFrames with pd.DatetimeIndex as index and 1
@@ -81,6 +81,10 @@ class Disaggregator(object):
 
         with os.scandir() as path_list:
             for entry in path_list:
-                if entry.is_file() and entry.name.startswith(self.file_prefix) and entry.name.endswith(".h5"):
+                if (
+                    entry.is_file()
+                    and entry.name.startswith(self.file_prefix)
+                    and entry.name.endswith(".h5")
+                ):
                     print("{}: Removing {}".format(self.MODEL_NAME, entry.path))
                     os.remove(entry.path)

@@ -12,7 +12,7 @@ class Node(object):
 
     requirements: Dict[str, Any] = {}
     postconditions: Dict[str, Any] = {}
-    results_class: Optional[Type]= None
+    results_class: Optional[Type] = None
 
     def __init__(self, upstream=None, generator=None):
         """
@@ -37,10 +37,10 @@ class Node(object):
             self.results = self.results_class()
 
     def process(self):
-        return self.generator # usually overridden by subclass
+        return self.generator  # usually overridden by subclass
 
     def run(self):
-        """Pulls data through the pipeline.  Useful if we just want to calculate 
+        """Pulls data through the pipeline.  Useful if we just want to calculate
         some stats."""
         for _ in self.process():
             pass
@@ -54,12 +54,13 @@ class Node(object):
         """
         # If a subclass has complex rules for preconditions then
         # override this method.
-        unsatisfied = find_unsatisfied_requirements(self.upstream.dry_run_metadata(),
-                                                    self.requirements)
+        unsatisfied = find_unsatisfied_requirements(
+            self.upstream.dry_run_metadata(), self.requirements
+        )
         if unsatisfied:
             msg = str(self) + " not satisfied by:\n" + str(unsatisfied)
             raise UnsatisfiedRequirementsError(msg)
-            
+
     def dry_run_metadata(self):
         """Does a 'dry run' so we can validate the full pipeline before
         loading any data.
@@ -78,7 +79,7 @@ class Node(object):
             results_dict = self.results.to_dict()
             recursively_update_dict(metadata, results_dict)
         else:
-            # Don't bother to deepcopy upstream's metadata if 
+            # Don't bother to deepcopy upstream's metadata if
             # we aren't going to modify it.
             metadata = self.upstream.get_metadata()
         return metadata
@@ -118,15 +119,17 @@ def find_unsatisfied_requirements(state, requirements):
             try:
                 cond_value = st[key]
             except KeyError:
-                msg = ("Requires '{}={}' but '{}' not in state dict."
-                       .format(key, value, key))
+                msg = "Requires '{}={}' but '{}' not in state dict.".format(
+                    key, value, key
+                )
                 unsatisfied.append(msg)
             else:
                 if isinstance(value, dict):
                     unsatisfied_requirements(cond_value, value)
-                elif value != 'ANY VALUE' and cond_value != value:
-                    msg = ("Requires '{}={}' not '{}={}'."
-                           .format(key, value, key, cond_value))
+                elif value != "ANY VALUE" and cond_value != value:
+                    msg = "Requires '{}={}' not '{}={}'.".format(
+                        key, value, key, cond_value
+                    )
                     unsatisfied.append(msg)
 
     unsatisfied_requirements(state, requirements)

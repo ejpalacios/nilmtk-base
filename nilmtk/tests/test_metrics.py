@@ -21,9 +21,9 @@ from nilmtk.utils import nodes_adjacent_to_root, tree_root
 class TestMetrics(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        filename = join(data_dir(), 'co_test.h5')
+        filename = join(data_dir(), "co_test.h5")
         cls.dataset = DataSet(filename)
-        
+
     @classmethod
     def tearDownClass(cls):
         cls.dataset.store.close()
@@ -44,5 +44,6 @@ class TestMetrics(unittest.TestCase):
         f1 = f1_score(disag_elec, self.dataset.buildings[1].elec)
         """
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

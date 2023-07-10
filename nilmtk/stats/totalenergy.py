@@ -11,10 +11,11 @@ from .totalenergyresults import TotalEnergyResults
 
 
 class TotalEnergy(Node):
-
-    requirements = {'device': {'max_sample_period': 'ANY VALUE'},
-                    'preprocessing_applied': {'clip': 'ANY VALUE'}}
-    postconditions =  {'statistics': {'energy': {}}}
+    requirements = {
+        "device": {"max_sample_period": "ANY VALUE"},
+        "preprocessing_applied": {"clip": "ANY VALUE"},
+    }
+    postconditions = {"statistics": {"energy": {}}}
     results_class = TotalEnergyResults
 
     def process(self):
@@ -23,7 +24,7 @@ class TotalEnergy(Node):
         """
         self.check_requirements()
         metadata = self.upstream.get_metadata()
-        max_sample_period = metadata['device']['max_sample_period']
+        max_sample_period = metadata["device"]["max_sample_period"]
         for chunk in self.upstream.process():
             energy = get_total_energy(chunk, max_sample_period)
             self.results.append(chunk.timeframe, energy)
@@ -31,11 +32,13 @@ class TotalEnergy(Node):
 
     def required_measurements(self, state):
         """TotalEnergy needs all power and energy measurements."""
-        available_measurements = state['device']['measurements']
-        return [(measurement['physical_quantity'], measurement['type']) 
-                for measurement in available_measurements 
-                if measurement['physical_quantity'] in 
-                ['power', 'energy', 'cumulative energy']]
+        available_measurements = state["device"]["measurements"]
+        return [
+            (measurement["physical_quantity"], measurement["type"])
+            for measurement in available_measurements
+            if measurement["physical_quantity"]
+            in ["power", "energy", "cumulative energy"]
+        ]
 
 
 def get_total_energy(df, max_sample_period):
@@ -57,9 +60,11 @@ def get_total_energy(df, max_sample_period):
     PHYSICAL_QUANTITY_PREFS = ["cumulative energy", "energy", "power"]
     selected_columns = []
     for ac_type in AC_TYPES:
-        physical_quantities = [physical_quantity 
-                               for (physical_quantity, col_ac_type) in df.keys()
-                               if col_ac_type == ac_type]
+        physical_quantities = [
+            physical_quantity
+            for (physical_quantity, col_ac_type) in df.keys()
+            if col_ac_type == ac_type
+        ]
         for pq in PHYSICAL_QUANTITY_PREFS:
             if pq in physical_quantities:
                 selected_columns.append((pq, ac_type))
@@ -69,11 +74,11 @@ def get_total_energy(df, max_sample_period):
     for col in selected_columns:
         (physical_quantity, ac_type) = col
         series = df[col]
-        if physical_quantity == 'power':
+        if physical_quantity == "power":
             energy[ac_type] = _energy_for_power_series(series, max_sample_period)
-        elif physical_quantity == 'cumulative energy':
+        elif physical_quantity == "cumulative energy":
             energy[ac_type] = series.iloc[-1] - series.iloc[0]
-        elif physical_quantity == 'energy':
+        elif physical_quantity == "energy":
             energy[ac_type] = series.sum()
 
     return energy

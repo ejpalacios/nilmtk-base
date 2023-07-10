@@ -21,7 +21,7 @@ TODO:
 """
 
 
-def convert_redd(redd_path, output_filename, format='HDF'):
+def convert_redd(redd_path, output_filename, format="HDF"):
     """
     Parameters
     ----------
@@ -34,32 +34,34 @@ def convert_redd(redd_path, output_filename, format='HDF'):
     """
 
     def _redd_measurement_mapping_func(house_id, chan_id):
-        ac_type = 'apparent' if chan_id <= 2 else 'active'
-        return [('power', ac_type)]
-        
+        ac_type = "apparent" if chan_id <= 2 else "active"
+        return [("power", ac_type)]
+
     # Open DataStore
-    store = get_datastore(output_filename, format, mode='w')
+    store = get_datastore(output_filename, format, mode="w")
 
     # Convert raw data to DataStore
-    _convert(redd_path, store, _redd_measurement_mapping_func, 'US/Eastern')
+    _convert(redd_path, store, _redd_measurement_mapping_func, "US/Eastern")
 
-    s=join(get_module_directory(),
-                              'dataset_converters',
-                              'redd',
-                              'metadata')
-
+    s = join(get_module_directory(), "dataset_converters", "redd", "metadata")
 
     # Add metadata
-    save_yaml_to_datastore(join(get_module_directory(), 
-                              'dataset_converters', 
-                              'redd', 
-                              'metadata'),
-                         store)
+    save_yaml_to_datastore(
+        join(get_module_directory(), "dataset_converters", "redd", "metadata"), store
+    )
     store.close()
 
     print("Done converting REDD to HDF5!")
 
-def _convert(input_path, store, measurement_mapping_func, tz, sort_index=True, drop_duplicates=False):
+
+def _convert(
+    input_path,
+    store,
+    measurement_mapping_func,
+    tz,
+    sort_index=True,
+    drop_duplicates=False,
+):
     """
     Parameters
     ----------
@@ -72,7 +74,7 @@ def _convert(input_path, store, measurement_mapping_func, tz, sort_index=True, d
             - house_id
             - chan_id
         Function should return a list of tuples e.g. [('power', 'active')]
-    tz : str 
+    tz : str
         Timezone e.g. 'US/Eastern'
     sort_index : bool
         Defaults to True
@@ -95,9 +97,12 @@ def _convert(input_path, store, measurement_mapping_func, tz, sort_index=True, d
             key = Key(building=house_id, meter=chan_id)
             measurements = measurement_mapping_func(house_id, chan_id)
             csv_filename = _get_csv_filename(input_path, key)
-            df = _load_csv(csv_filename, measurements, tz, 
-                sort_index=sort_index, 
-                drop_duplicates=drop_duplicates
+            df = _load_csv(
+                csv_filename,
+                measurements,
+                tz,
+                sort_index=sort_index,
+                drop_duplicates=drop_duplicates,
             )
 
             store.put(str(key), df)
@@ -111,7 +116,7 @@ def _find_all_houses(input_path):
     list of integers (house instances)
     """
     dir_names = [p for p in listdir(input_path) if isdir(join(input_path, p))]
-    return _matching_ints(dir_names, r'^house_(\d)$')
+    return _matching_ints(dir_names, r"^house_(\d)$")
 
 
 def _find_all_chans(input_path, house_id):
@@ -120,9 +125,9 @@ def _find_all_chans(input_path, house_id):
     -------
     list of integers (channels)
     """
-    house_path = join(input_path, 'house_{:d}'.format(house_id))
+    house_path = join(input_path, "house_{:d}".format(house_id))
     filenames = [p for p in listdir(house_path) if isfile(join(house_path, p))]
-    return _matching_ints(filenames, r'^channel_(\d\d?).dat$')
+    return _matching_ints(filenames, r"^channel_(\d\d?).dat$")
 
 
 def _matching_ints(strings, regex):
@@ -159,19 +164,19 @@ def _get_csv_filename(input_path, key_obj):
     key_obj : (nilmtk.Key) the house and channel to load
 
     Returns
-    ------- 
+    -------
     filename : str
     """
     assert isinstance(input_path, str)
     assert isinstance(key_obj, Key)
 
     # Get path
-    house_path = 'house_{:d}'.format(key_obj.building)
+    house_path = "house_{:d}".format(key_obj.building)
     path = join(input_path, house_path)
     assert isdir(path)
 
     # Get filename
-    filename = 'channel_{:d}.dat'.format(key_obj.meter)
+    filename = "channel_{:d}.dat".format(key_obj.meter)
     filename = join(path, filename)
     assert isfile(filename)
 
@@ -184,7 +189,7 @@ def _load_csv(filename, columns, tz, drop_duplicates=False, sort_index=False):
     ----------
     filename : str
     columns : list of tuples (for hierarchical column index)
-    tz : str 
+    tz : str
         e.g. 'US/Eastern'
     sort_index : bool
         Defaults to True
@@ -197,21 +202,22 @@ def _load_csv(filename, columns, tz, drop_duplicates=False, sort_index=False):
     pandas.DataFrame
     """
     # Load data
-    df = pd.read_csv(filename, sep=' ', names=columns,
-                     dtype={m:np.float32 for m in columns})
-    
+    df = pd.read_csv(
+        filename, sep=" ", names=columns, dtype={m: np.float32 for m in columns}
+    )
+
     # Modify the column labels to reflect the power measurements recorded.
     df.columns.set_names(LEVEL_NAMES, inplace=True)
 
-    # Convert the integer index column to timezone-aware datetime 
-    df.index = pd.to_datetime(df.index.values, unit='s', utc=True)
+    # Convert the integer index column to timezone-aware datetime
+    df.index = pd.to_datetime(df.index.values, unit="s", utc=True)
     df = df.tz_convert(tz)
 
     if sort_index:
-        df = df.sort_index() # raw REDD data isn't always sorted
-        
+        df = df.sort_index()  # raw REDD data isn't always sorted
+
     if drop_duplicates:
-        dups_in_index = df.index.duplicated(keep='first')
+        dups_in_index = df.index.duplicated(keep="first")
         if dups_in_index.any():
             df = df[~dups_in_index]
 
