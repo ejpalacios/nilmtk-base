@@ -1,14 +1,14 @@
+import copy
+import pickle
 from warnings import warn
 
-import pandas as pd
 import numpy as np
-import pickle
-import copy
+import pandas as pd
 
-from nilmtk.utils import find_nearest
-from nilmtk.feature_detectors import cluster
-from nilmtk.disaggregate import Disaggregator
 from nilmtk.datastore import HDFDataStore
+from nilmtk.disaggregate import Disaggregator
+from nilmtk.feature_detectors import cluster
+from nilmtk.utils import find_nearest
 
 
 class CO(Disaggregator):

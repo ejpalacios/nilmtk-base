@@ -1,9 +1,10 @@
+from copy import deepcopy
+from datetime import timedelta
+from functools import total_ordering
+from warnings import warn
+
 import pandas as pd
 import pytz
-from datetime import timedelta
-from copy import deepcopy
-from warnings import warn
-from functools import total_ordering
 
 
 @total_ordering

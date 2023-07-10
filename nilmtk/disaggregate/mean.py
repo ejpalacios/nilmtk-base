@@ -1,9 +1,12 @@
-from warnings import warn
-import pandas as pd
-import numpy as np
 import json
-from nilmtk.disaggregate import Disaggregator
 import os
+from warnings import warn
+
+import numpy as np
+import pandas as pd
+
+from nilmtk.disaggregate import Disaggregator
+
 
 class Mean(Disaggregator):
     def __init__(self, params):

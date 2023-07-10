@@ -1,8 +1,9 @@
-import matplotlib
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import numpy as np
 from math import sqrt
+
+import matplotlib
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import numpy as np
 
 try:
     _to_ordinalf_np_vectorized = np.vectorize(mdates._to_ordinalf)

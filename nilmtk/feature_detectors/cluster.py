@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+
 def cluster(X, max_num_clusters=3, exact_num_clusters=None):
     '''Applies clustering on reduced data,
     i.e. data where power is greater than threshold.
@@ -131,6 +132,7 @@ def _apply_clustering(X, max_num_clusters, exact_num_clusters=None):
 def hart85_means_shift_cluster(pair_buffer_df, columns):
 
     from sklearn.cluster import MeanShift
+
     # Creating feature vector
     cluster_df = pd.DataFrame()
     power_types = [col[1] for col in columns]

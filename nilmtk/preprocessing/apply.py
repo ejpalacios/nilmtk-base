@@ -1,5 +1,6 @@
 from ..node import Node
 
+
 class Apply(Node):
     
     """Apply an arbitrary function to each pd.Series chunk."""

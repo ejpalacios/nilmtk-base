@@ -1,7 +1,9 @@
-from nilmtk.datastore import HDFDataStore, CSVDataStore 
-from nilmtk.datastore.datastore import convert_datastore
 import os
 import shutil
+
+from nilmtk.datastore import CSVDataStore, HDFDataStore
+from nilmtk.datastore.datastore import convert_datastore
+
 
 def test_convert_random_dataset():
     input_filepath = 'data/random.h5'

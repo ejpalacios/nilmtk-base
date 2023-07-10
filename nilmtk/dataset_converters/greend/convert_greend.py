@@ -1,17 +1,19 @@
-from os import listdir, getcwd
-from os.path import join, isdir, isfile, dirname, abspath
-import pandas as pd
-import numpy as np
 import datetime
 import time
-from nilmtk.datastore import Key
-from nilmtk.measurement import LEVEL_NAMES
-from nilm_metadata import convert_yaml_to_hdf5
 import warnings
-import numpy as np
 from io import StringIO
 from multiprocessing import Pool
+from os import getcwd, listdir
+from os.path import abspath, dirname, isdir, isfile, join
+
+import numpy as np
+import pandas as pd
+from nilm_metadata import convert_yaml_to_hdf5
+
+from nilmtk.datastore import Key
+from nilmtk.measurement import LEVEL_NAMES
 from nilmtk.utils import get_module_directory
+
 
 def _get_blocks(filename):
     '''

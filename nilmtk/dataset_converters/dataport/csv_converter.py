@@ -8,21 +8,21 @@ NB: If you have direct access to the SQL database, please prefer using the other
 converter named `download_dataport.py`.
 """
 
-import nilmtk.datastore
-import nilmtk.measurement
-import numpy as np
 import os
 import os.path
-import pandas as pd
 import re
 import shutil
 import tempfile
-import yaml
-
 from collections import OrderedDict
-from nilm_metadata import convert_yaml_to_hdf5
-from nilmtk.utils import get_module_directory
 
+import numpy as np
+import pandas as pd
+import yaml
+from nilm_metadata import convert_yaml_to_hdf5
+
+import nilmtk.datastore
+import nilmtk.measurement
+from nilmtk.utils import get_module_directory
 
 DATA_AVAILABILITIES = [ "97%", "98%", "99%", "100%" ]
 METADATA_COLS = [

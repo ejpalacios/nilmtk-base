@@ -1,16 +1,19 @@
 import itertools
-from copy import deepcopy
-from collections import OrderedDict
-from warnings import warn
 import pickle
-import nilmtk
-import pandas as pd
+from collections import OrderedDict
+from copy import deepcopy
+from warnings import warn
+
 import numpy as np
+import pandas as pd
 from hmmlearn import hmm
 
+import nilmtk
+
+from ...datastore import HDFDataStore
 from ...feature_detectors import cluster
 from . import Disaggregator
-from ...datastore import HDFDataStore
+
 
 def sort_startprob(mapping, startprob):
     """ Sort the startprob according to power means; as returned by mapping

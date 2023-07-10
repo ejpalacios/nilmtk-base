@@ -1,18 +1,19 @@
+import datetime
 import os
 import re
-import datetime
-import sys
-from os.path import join, isdir, isfile, dirname, abspath
-import pandas as pd
-import yaml
-import psycopg2 as db
-from nilmtk.measurement import measurement_columns
-from nilmtk.measurement import LEVEL_NAMES
-from nilmtk.datastore import Key
-from nilm_metadata import convert_yaml_to_hdf5
-from nilmtk.utils import get_module_directory
 import shutil
+import sys
 import tempfile
+from os.path import abspath, dirname, isdir, isfile, join
+
+import pandas as pd
+import psycopg2 as db
+import yaml
+from nilm_metadata import convert_yaml_to_hdf5
+
+from nilmtk.datastore import Key
+from nilmtk.measurement import LEVEL_NAMES, measurement_columns
+from nilmtk.utils import get_module_directory
 
 """
 MANUAL:

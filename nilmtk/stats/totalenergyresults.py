@@ -1,6 +1,8 @@
-from ..results import Results
-from ..measurement import AC_TYPES
 import pandas as pd
+
+from ..measurement import AC_TYPES
+from ..results import Results
+
 
 class TotalEnergyResults(Results):
     """

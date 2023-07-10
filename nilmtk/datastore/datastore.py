@@ -1,6 +1,8 @@
-import yaml
-from nilmtk.timeframe import TimeFrame
 from io import open
+
+import yaml
+
+from nilmtk.timeframe import TimeFrame
 
 MAX_MEM_ALLOWANCE_IN_BYTES = 2**28
 

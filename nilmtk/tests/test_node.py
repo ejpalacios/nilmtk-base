@@ -1,5 +1,7 @@
 import unittest
+
 from ..node import find_unsatisfied_requirements
+
 
 class TestNode(unittest.TestCase):
 

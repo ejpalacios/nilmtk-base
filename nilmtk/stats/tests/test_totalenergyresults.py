@@ -1,6 +1,8 @@
 import unittest
-from ..totalenergyresults import TotalEnergyResults
+
 from ... import TimeFrame
+from ..totalenergyresults import TotalEnergyResults
+
 
 class TestEnergyResults(unittest.TestCase):
 

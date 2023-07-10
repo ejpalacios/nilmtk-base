@@ -1,18 +1,19 @@
-import pandas as pd
-import numpy as np
-from copy import deepcopy
-from os.path import join, isdir, isfile
-from os import listdir
-import re
 import glob
-from sys import stdout
-from nilmtk.utils import get_datastore
-from nilmtk.datastore import Key
-from nilmtk.timeframe import TimeFrame
-from nilmtk.measurement import LEVEL_NAMES
-from nilmtk.utils import get_module_directory, check_directory_exists
-from nilm_metadata import convert_yaml_to_hdf5, save_yaml_to_datastore
+import re
 import sys
+from copy import deepcopy
+from os import listdir
+from os.path import isdir, isfile, join
+from sys import stdout
+
+import numpy as np
+import pandas as pd
+from nilm_metadata import convert_yaml_to_hdf5, save_yaml_to_datastore
+
+from nilmtk.datastore import Key
+from nilmtk.measurement import LEVEL_NAMES
+from nilmtk.timeframe import TimeFrame
+from nilmtk.utils import check_directory_exists, get_datastore, get_module_directory
 
 
 def convert_hipe(hipe_path, output_filename, format="HDF"):

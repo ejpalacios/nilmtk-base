@@ -1,21 +1,27 @@
-from warnings import warn
 from collections import namedtuple
 from copy import deepcopy
+from typing import Any, Dict
+from warnings import warn
+
 import numpy as np
 import pandas as pd
-from .preprocessing import Clip
-from .stats import TotalEnergy, GoodSections, DropoutRate
-from .hashable import Hashable
-from .measurement import (select_best_ac_type, PHYSICAL_QUANTITIES,
-                          check_ac_type, check_physical_quantity)
-from .node import Node
-from .electric import Electric
-from nilmtk.exceptions import MeasurementError
-from .utils import flatten_2d_list, capitalise_first_letter
-from nilmtk.timeframegroup import TimeFrameGroup
-import nilmtk
 
-from typing import Dict, Any
+import nilmtk
+from nilmtk.exceptions import MeasurementError
+from nilmtk.timeframegroup import TimeFrameGroup
+
+from .electric import Electric
+from .hashable import Hashable
+from .measurement import (
+    PHYSICAL_QUANTITIES,
+    check_ac_type,
+    check_physical_quantity,
+    select_best_ac_type,
+)
+from .node import Node
+from .preprocessing import Clip
+from .stats import DropoutRate, GoodSections, TotalEnergy
+from .utils import capitalise_first_letter, flatten_2d_list
 
 ElecMeterID = namedtuple('ElecMeterID', ['instance', 'building', 'dataset'])
 

@@ -1,13 +1,15 @@
 import os
 from collections import OrderedDict
-import pandas as pd
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from matplotlib.dates import DateFormatter
+
 from .building import Building
 from .datastore.datastore import join_key
-from .utils import get_datastore
 from .timeframe import TimeFrame
+from .utils import get_datastore
 
 
 class DataSet(object):

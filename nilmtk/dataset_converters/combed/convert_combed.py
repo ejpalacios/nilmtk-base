@@ -1,10 +1,12 @@
-from os.path import join, isdir, dirname, abspath
-from os import getcwd
 import os
-from sys import getfilesystemencoding
 from collections import OrderedDict
+from os import getcwd
+from os.path import abspath, dirname, isdir, join
+from sys import getfilesystemencoding
+
 import pandas as pd
 from nilm_metadata import convert_yaml_to_hdf5
+
 from nilmtk.datastore import Key
 from nilmtk.measurement import LEVEL_NAMES
 from nilmtk.utils import check_directory_exists, get_datastore, get_module_directory

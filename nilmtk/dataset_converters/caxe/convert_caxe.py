@@ -1,8 +1,9 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
+from nilm_metadata import convert_yaml_to_hdf5
+
 from nilmtk.datastore import Key
 from nilmtk.utils import check_directory_exists, get_datastore, get_module_directory
-from nilm_metadata import convert_yaml_to_hdf5
 
 TIMESTAMP_COLUMN_NAME = "timestamp"
 TIMEZONE = "Asia/Kolkata"

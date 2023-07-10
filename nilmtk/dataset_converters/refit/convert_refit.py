@@ -15,20 +15,21 @@ https://doi.org/10.15129/9ab14b0e-19ac-4279-938f-27f643078cec
 
 '''
 
-import pandas as pd
-import numpy as np
-from copy import deepcopy
-from os.path import join, isdir, isfile, exists
-from os import listdir
 import fnmatch
 import re
+from copy import deepcopy
+from os import listdir
+from os.path import exists, isdir, isfile, join
 from sys import stdout
-from nilmtk.utils import get_datastore
-from nilmtk.datastore import Key
-from nilmtk.timeframe import TimeFrame
-from nilmtk.measurement import LEVEL_NAMES
-from nilmtk.utils import get_module_directory, check_directory_exists
+
+import numpy as np
+import pandas as pd
 from nilm_metadata import convert_yaml_to_hdf5, save_yaml_to_datastore
+
+from nilmtk.datastore import Key
+from nilmtk.measurement import LEVEL_NAMES
+from nilmtk.timeframe import TimeFrame
+from nilmtk.utils import check_directory_exists, get_datastore, get_module_directory
 
 
 def convert_refit(input_path, output_filename, format='HDF'):

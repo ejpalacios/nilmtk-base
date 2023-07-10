@@ -1,10 +1,12 @@
 import unittest
-from os.path import join
 from os import remove
-from .testingtools import data_dir
-from nilmtk.datastore import HDFDataStore
+from os.path import join
+
 from nilmtk import DataSet
+from nilmtk.datastore import HDFDataStore
 from nilmtk.legacy.disaggregate import FHMM
+
+from .testingtools import data_dir
 
 
 class TestFHMM(unittest.TestCase):

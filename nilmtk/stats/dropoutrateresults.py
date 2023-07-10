@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
-from ..results import Results
+
 from ..consts import SECS_PER_DAY
+from ..results import Results
+
 
 class DropoutRateResults(Results):
     """

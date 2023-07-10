@@ -34,13 +34,14 @@ Functions
 
 '''
 
-import numpy as np
-import pandas as pd
 import math
 from warnings import warn
-from .metergroup import MeterGroup
-from .metergroup import iterate_through_submeters_of_two_metergroups
+
+import numpy as np
+import pandas as pd
+
 from .electric import align_two_meters
+from .metergroup import MeterGroup, iterate_through_submeters_of_two_metergroups
 
 
 def error_in_assigned_energy(predictions, ground_truth):

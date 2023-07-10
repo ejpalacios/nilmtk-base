@@ -1,15 +1,17 @@
 import unittest
+from datetime import timedelta
 from os.path import join
+
 import numpy as np
 import pandas as pd
-from datetime import timedelta
+
+from ... import ElecMeter, HDFDataStore, MeterGroup, TimeFrame
+from ...consts import JOULES_PER_KWH
+from ...elecmeter import ElecMeterID
+from ...tests.testingtools import data_dir
 from .. import DropoutRate
 from ..goodsectionsresults import GoodSectionsResults
 from ..totalenergy import _energy_for_power_series
-from ... import TimeFrame, ElecMeter, HDFDataStore, MeterGroup
-from ...elecmeter import ElecMeterID
-from ...consts import JOULES_PER_KWH
-from ...tests.testingtools import data_dir
 
 METER_ID = ElecMeterID(instance=1, building=1, dataset='REDD')
 METER_ID2 = ElecMeterID(instance=2, building=1, dataset='REDD')

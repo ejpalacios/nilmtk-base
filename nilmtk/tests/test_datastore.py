@@ -1,12 +1,14 @@
+import unittest
+from datetime import timedelta
+from os.path import isfile, join
+
 import numpy as np
 import pandas as pd
-import unittest
+
+from nilmtk import TimeFrame
+from nilmtk.datastore import CSVDataStore, HDFDataStore, TmpDataStore
 
 from .testingtools import data_dir
-from datetime import timedelta
-from nilmtk.datastore import HDFDataStore, CSVDataStore, TmpDataStore
-from nilmtk import TimeFrame
-from os.path import join, isfile
 
 
 # class name can't begin with test

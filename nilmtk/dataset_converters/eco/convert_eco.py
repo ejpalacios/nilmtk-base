@@ -1,13 +1,15 @@
-import pandas as pd
-import numpy as np
 import sys
-from os import listdir, getcwd
-from os.path import isdir, join, dirname, abspath
+from os import getcwd, listdir
+from os.path import abspath, dirname, isdir, join
+
+import numpy as np
+import pandas as pd
+from nilm_metadata import convert_yaml_to_hdf5
 from pandas import concat
-from nilmtk.utils import get_module_directory, check_directory_exists
+
 from nilmtk.datastore import Key
 from nilmtk.measurement import LEVEL_NAMES
-from nilm_metadata import convert_yaml_to_hdf5
+from nilmtk.utils import check_directory_exists, get_module_directory
 
 """
 DATASET STRUCTURE:

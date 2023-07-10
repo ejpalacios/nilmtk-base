@@ -1,22 +1,25 @@
-import pandas as pd
-from itertools import repeat, tee
-from time import time
-from copy import deepcopy
-from collections import OrderedDict
-import numpy as np
-import yaml
-from os.path import isdir, isfile, join, exists, dirname
-from os import listdir, makedirs, remove
-from shutil import rmtree
 import re
+from collections import OrderedDict
+from copy import deepcopy
+from itertools import repeat, tee
+from os import listdir, makedirs, remove
+from os.path import dirname, exists, isdir, isfile, join
+from shutil import rmtree
+from time import time
+
+import numpy as np
+import pandas as pd
+import yaml
 from nilm_metadata.convert_yaml_to_hdf5 import _load_file
+
+from nilmtk.datastore import MAX_MEM_ALLOWANCE_IN_BYTES, DataStore
+from nilmtk.datastore.datastore import join_key, write_yaml_to_file
+from nilmtk.datastore.key import Key
+from nilmtk.docinherit import doc_inherit
+from nilmtk.node import Node
 from nilmtk.timeframe import TimeFrame
 from nilmtk.timeframegroup import TimeFrameGroup
-from nilmtk.node import Node
-from nilmtk.datastore import DataStore, MAX_MEM_ALLOWANCE_IN_BYTES
-from nilmtk.datastore.key import Key
-from nilmtk.datastore.datastore import write_yaml_to_file, join_key
-from nilmtk.docinherit import doc_inherit
+
 
 class CSVDataStore(DataStore):
 

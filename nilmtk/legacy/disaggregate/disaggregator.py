@@ -1,5 +1,6 @@
 from datetime import datetime
-from ...timeframe import merge_timeframes, TimeFrame
+
+from ...timeframe import TimeFrame, merge_timeframes
 
 
 class Disaggregator(object):

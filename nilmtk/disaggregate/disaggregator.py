@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
-from nilmtk.timeframe import merge_timeframes, TimeFrame
+
+from nilmtk.timeframe import TimeFrame, merge_timeframes
+
 
 class Disaggregator(object):
     """Provides a common interface to all disaggregation classes.

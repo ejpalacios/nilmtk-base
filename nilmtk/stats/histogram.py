@@ -1,5 +1,6 @@
-import numpy as np
 from warnings import warn
+
+import numpy as np
 
 
 def histogram_from_generator(generator, bins=None, range=None, **kwargs):

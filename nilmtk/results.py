@@ -1,8 +1,12 @@
 import abc
-import pandas as pd
 import copy
-from .timeframe import TimeFrame
+
+import pandas as pd
+
 from nilmtk.utils import get_tz, tz_localize_naive
+
+from .timeframe import TimeFrame
+
 
 class Results(object):
     """Stats results from each node need to be assigned to a specific

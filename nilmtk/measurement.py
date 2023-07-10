@@ -1,5 +1,7 @@
 from warnings import warn
+
 import pandas as pd
+
 from nilmtk.exceptions import MeasurementError
 
 AC_TYPES = ['active', 'apparent', 'reactive']

@@ -1,6 +1,8 @@
 from copy import deepcopy
-from typing import Dict, Any, Optional, Type
+from typing import Any, Dict, Optional, Type
+
 from nilm_metadata import recursively_update_dict
+
 
 class Node(object):
     """Abstract class defining interface for all Node subclasses,

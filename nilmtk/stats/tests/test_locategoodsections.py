@@ -1,13 +1,15 @@
 import unittest
+from datetime import timedelta
 from os.path import join
+
 import numpy as np
 import pandas as pd
-from datetime import timedelta
-from nilmtk.stats import GoodSections
-from nilmtk.stats.goodsectionsresults import GoodSectionsResults
-from nilmtk import TimeFrame, ElecMeter, DataSet
+
+from nilmtk import DataSet, ElecMeter, TimeFrame
 from nilmtk.datastore import HDFDataStore
 from nilmtk.elecmeter import ElecMeterID
+from nilmtk.stats import GoodSections
+from nilmtk.stats.goodsectionsresults import GoodSectionsResults
 from nilmtk.tests.testingtools import data_dir
 
 METER_ID = ElecMeterID(instance=1, building=1, dataset='REDD')

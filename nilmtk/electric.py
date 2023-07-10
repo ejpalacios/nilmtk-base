@@ -1,28 +1,34 @@
-import pandas as pd
-import numpy as np
+import gc
 from collections import Counter
+from datetime import timedelta
+from math import log, pi
 from warnings import warn
-import scipy.spatial as ss
-from scipy import fft
-from pandas.plotting import lag_plot, autocorrelation_plot
-from scipy.special import digamma,gamma
-from math import log,pi
-import numpy.random as nr
+
 import matplotlib.pyplot as plt
 import numpy as np
-from datetime import timedelta
-import gc
+import numpy.random as nr
+import pandas as pd
 import pytz
+import scipy.spatial as ss
+from pandas.plotting import autocorrelation_plot, lag_plot
+from scipy import fft
+from scipy.special import digamma, gamma
 
-from .timeframe import TimeFrame
+from nilmtk.appliance import DEFAULT_ON_POWER_THRESHOLD
+from nilmtk.stats.histogram import histogram_from_generator
+
 from .measurement import select_best_ac_type
-from .utils import (offset_alias_to_seconds, convert_to_timestamp,
-                    flatten_2d_list, append_or_extend_list,
-                    timedelta64_to_secs, safe_resample)
 from .plots import plot_series
 from .preprocessing import Apply
-from nilmtk.stats.histogram import histogram_from_generator
-from nilmtk.appliance import DEFAULT_ON_POWER_THRESHOLD
+from .timeframe import TimeFrame
+from .utils import (
+    append_or_extend_list,
+    convert_to_timestamp,
+    flatten_2d_list,
+    offset_alias_to_seconds,
+    safe_resample,
+    timedelta64_to_secs,
+)
 
 MAX_SIZE_ENTROPY = 10000
 

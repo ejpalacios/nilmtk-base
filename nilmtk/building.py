@@ -1,8 +1,10 @@
-from collections import namedtuple, OrderedDict
+from collections import OrderedDict, namedtuple
+
 import pandas as pd
-from .metergroup import MeterGroup
+
 from .datastore.datastore import join_key
 from .hashable import Hashable
+from .metergroup import MeterGroup
 
 BuildingID = namedtuple('BuildingID', ['instance', 'dataset'])
 

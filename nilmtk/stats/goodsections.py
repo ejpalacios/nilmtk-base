@@ -1,11 +1,16 @@
-import numpy as np
-from numpy import diff, concatenate
 import gc
-from .goodsectionsresults import GoodSectionsResults
-from ..timeframe import TimeFrame
-from ..utils import timedelta64_to_secs
+
+import numpy as np
+from numpy import concatenate, diff
+
 from ..node import Node
-from ..timeframe import list_of_timeframes_from_list_of_dicts, timeframe_from_dict
+from ..timeframe import (
+    TimeFrame,
+    list_of_timeframes_from_list_of_dicts,
+    timeframe_from_dict,
+)
+from ..utils import timedelta64_to_secs
+from .goodsectionsresults import GoodSectionsResults
 
 
 class GoodSections(Node):

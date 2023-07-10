@@ -1,14 +1,16 @@
-import pandas as pd
-from datetime import timedelta
-from nilmtk.tests.testingtools import data_dir
-from os.path import join
 import itertools
 from collections import OrderedDict
-import numpy as np
-from nilmtk.consts import JOULES_PER_KWH
-from nilmtk.measurement import measurement_columns, AC_TYPES
-from nilmtk.utils import flatten_2d_list
+from datetime import timedelta
+from os.path import join
 from typing import Dict
+
+import numpy as np
+import pandas as pd
+
+from nilmtk.consts import JOULES_PER_KWH
+from nilmtk.measurement import AC_TYPES, measurement_columns
+from nilmtk.tests.testingtools import data_dir
+from nilmtk.utils import flatten_2d_list
 
 MAX_SAMPLE_PERIOD = 15
 

@@ -1,6 +1,8 @@
+import sys
+
 import numpy as np
 import pandas as pd
-import sys
+
 
 def find_steady_states_transients(metergroup, columns, noise_level,
                                   state_threshold, **load_kwargs):
@@ -270,8 +272,8 @@ def _apply_clustering(X, max_num_clusters):
         List of power in different states of an appliance
     '''
     # If we import sklearn at the top of the file then it makes autodoc fail
-    from sklearn.cluster import KMeans
     from sklearn import metrics
+    from sklearn.cluster import KMeans
 
     # Finds whether 2 or 3 gives better Silhouellete coefficient
     # Whichever is higher serves as the number of clusters for that

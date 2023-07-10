@@ -1,8 +1,10 @@
-import requests
-from os.path import join
-import pandas as pd
 import os
 import time
+from os.path import join
+
+import pandas as pd
+import requests
+
 
 def download():
     START_TIME_STR = "01-06-2014 0:0:0"

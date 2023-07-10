@@ -1,11 +1,13 @@
-import numpy as np
 import gc
-from .totalenergyresults import TotalEnergyResults
-from ..node import Node
-from ..utils import timedelta64_to_secs
+
+import numpy as np
+
 from ..consts import JOULES_PER_KWH
 from ..measurement import AC_TYPES
+from ..node import Node
 from ..timeframe import TimeFrame
+from ..utils import timedelta64_to_secs
+from .totalenergyresults import TotalEnergyResults
 
 
 class TotalEnergy(Node):

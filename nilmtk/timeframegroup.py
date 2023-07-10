@@ -1,6 +1,7 @@
+from datetime import timedelta
+
 import matplotlib.pyplot as plt
 import pandas as pd
-from datetime import timedelta
 
 # NILMTK imports
 from nilmtk.consts import SECS_PER_DAY

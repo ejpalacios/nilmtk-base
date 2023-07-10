@@ -1,18 +1,20 @@
+import datetime
 import itertools
-from copy import deepcopy
-from collections import OrderedDict
-from warnings import warn
 import pickle
-import nilmtk
-import pandas as pd
+from collections import OrderedDict
+from copy import deepcopy
+from warnings import warn
+
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from hmmlearn import hmm
 
-from nilmtk.feature_detectors import cluster
-from nilmtk.disaggregate import Disaggregator
+import nilmtk
 from nilmtk.datastore import HDFDataStore
-import datetime
-import matplotlib.pyplot as plt
+from nilmtk.disaggregate import Disaggregator
+from nilmtk.feature_detectors import cluster
+
 
 def sort_startprob(mapping, startprob):
     """ Sort the startprob according to power means; as returned by mapping

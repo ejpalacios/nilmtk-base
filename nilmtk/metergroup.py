@@ -1,36 +1,50 @@
-import warnings
 import gc
-from sys import stdout
-from collections import Counter
+import warnings
+from collections import Counter, namedtuple
 from copy import copy, deepcopy
-from collections import namedtuple
 from datetime import timedelta
+from sys import stdout
 
-import networkx as nx
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.sankey import Sankey 
-from matplotlib.ticker import FuncFormatter
+import networkx as nx
+import numpy as np
+import pandas as pd
 from matplotlib import MatplotlibDeprecationWarning
+from matplotlib.sankey import Sankey
+from matplotlib.ticker import FuncFormatter
+
+from nilmtk.exceptions import MeasurementError
+from nilmtk.timeframegroup import TimeFrameGroup
+
+from .appliance import Appliance
+from .datastore import MAX_MEM_ALLOWANCE_IN_BYTES
+from .datastore.datastore import join_key
 
 # NILMTK imports
 from .elecmeter import ElecMeter, ElecMeterID
-from .appliance import Appliance
-from .datastore.datastore import join_key
-from .utils import (tree_root, nodes_adjacent_to_root, simplest_type_for,
-                    flatten_2d_list, convert_to_timestamp, normalise_timestamp,
-                    print_on_line, convert_to_list, append_or_extend_list,
-                    most_common, capitalise_first_letter)
-from .plots import plot_series
-from .measurement import (select_best_ac_type, AC_TYPES, LEVEL_NAMES,
-                          PHYSICAL_QUANTITIES_TO_AVERAGE)
-from nilmtk.exceptions import MeasurementError
 from .electric import Electric
-from .timeframe import TimeFrame, split_timeframes
+from .measurement import (
+    AC_TYPES,
+    LEVEL_NAMES,
+    PHYSICAL_QUANTITIES_TO_AVERAGE,
+    select_best_ac_type,
+)
+from .plots import plot_series
 from .preprocessing import Apply
-from .datastore import MAX_MEM_ALLOWANCE_IN_BYTES
-from nilmtk.timeframegroup import TimeFrameGroup
+from .timeframe import TimeFrame, split_timeframes
+from .utils import (
+    append_or_extend_list,
+    capitalise_first_letter,
+    convert_to_list,
+    convert_to_timestamp,
+    flatten_2d_list,
+    most_common,
+    nodes_adjacent_to_root,
+    normalise_timestamp,
+    print_on_line,
+    simplest_type_for,
+    tree_root,
+)
 
 # MeterGroupID.meters is a tuple of ElecMeterIDs.  Order doesn't matter.
 # (we can't use a set because sets aren't hashable so we can't use 

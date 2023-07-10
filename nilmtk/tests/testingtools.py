@@ -2,7 +2,10 @@
 Tools to help with testing.
 """
 
-import os, inspect, warnings
+import inspect
+import os
+import warnings
+
 
 def data_dir():
     # Taken from http://stackoverflow.com/a/6098238/732596

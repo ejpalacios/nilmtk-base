@@ -1,12 +1,13 @@
-from datetime import datetime
-import pandas as pd
+from datetime import datetime, timedelta
+
 import numpy as np
-from ...timeframe import merge_timeframes, TimeFrame
-from .disaggregator import Disaggregator
+import pandas as pd
 from matplotlib import pyplot as plt
-from datetime import timedelta
-from scipy.stats import poisson, norm
+from scipy.stats import norm, poisson
 from sklearn import mixture
+
+from ...timeframe import TimeFrame, merge_timeframes
+from .disaggregator import Disaggregator
 
 
 class MLE(Disaggregator):

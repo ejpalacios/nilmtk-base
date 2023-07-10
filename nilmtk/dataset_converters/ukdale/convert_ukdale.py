@@ -1,11 +1,12 @@
 from os import remove
 from os.path import join
-from nilmtk.dataset_converters.redd.convert_redd import (_convert, _load_csv)
-from nilmtk import DataSet
-from nilmtk.utils import get_datastore
-from nilmtk.datastore import Key
+
 from nilm_metadata import convert_yaml_to_hdf5
 
+from nilmtk import DataSet
+from nilmtk.dataset_converters.redd.convert_redd import _convert, _load_csv
+from nilmtk.datastore import Key
+from nilmtk.utils import get_datastore
 
 ONE_SEC_COLUMNS = [('power', 'active'), ('power', 'apparent'), ('voltage', '')]
 TZ = 'Europe/London'

@@ -1,5 +1,7 @@
 import unittest
+
 import pandas as pd
+
 from nilmtk.timeframe import TimeFrame, merge_timeframes
 
 

@@ -1,14 +1,16 @@
+import warnings
 from copy import deepcopy
 from os.path import isfile
-import warnings
 
 import numpy as np
 import pandas as pd
 
+from nilmtk.docinherit import doc_inherit
 from nilmtk.timeframe import TimeFrame
 from nilmtk.timeframegroup import TimeFrameGroup
-from .datastore import DataStore, MAX_MEM_ALLOWANCE_IN_BYTES
-from nilmtk.docinherit import doc_inherit
+
+from .datastore import MAX_MEM_ALLOWANCE_IN_BYTES, DataStore
+
 
 class HDFDataStore(DataStore):
 

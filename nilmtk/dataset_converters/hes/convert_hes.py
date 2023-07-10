@@ -1,15 +1,18 @@
+import shutil
+import tempfile
 from os.path import join
-import pandas as pd
+from sys import stderr
+
 import numpy as np
-from nilmtk.utils import get_module_directory
+import pandas as pd
+import yaml
+from nilm_metadata import convert_yaml_to_hdf5
+
 from nilmtk import DataSet
-from nilmtk.utils import get_datastore
 from nilmtk.datastore import Key
 from nilmtk.measurement import LEVEL_NAMES
-from nilm_metadata import convert_yaml_to_hdf5
-import tempfile, shutil
-from sys import stderr
-import yaml
+from nilmtk.utils import get_datastore, get_module_directory
+
 """
 TODO
 ----

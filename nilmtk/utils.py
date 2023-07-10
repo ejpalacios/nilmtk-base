@@ -1,25 +1,28 @@
-from os.path import isdir, dirname, abspath
-from os import getcwd
-from inspect import currentframe, getfile, getsourcefile
-from sys import getfilesystemencoding, stdout
-from collections import OrderedDict, defaultdict
-import datetime, re
-import pytz
+import datetime
+import re
 import warnings
+from collections import OrderedDict, defaultdict
+from inspect import currentframe, getfile, getsourcefile
+from os import getcwd
+from os.path import abspath, dirname, isdir
+from sys import getfilesystemencoding, stdout
+
+import networkx as nx
 import numpy as np
 import pandas as pd
-import networkx as nx
+import pytz
 from IPython.core.display import HTML, display
 from sklearn.metrics import mean_squared_error
 
-from nilmtk.datastore import HDFDataStore, CSVDataStore
+from nilmtk.datastore import CSVDataStore, HDFDataStore
+
 
 def show_versions():
     """Prints versions of various dependencies"""
     output = OrderedDict()
     output["Date"] = str(datetime.datetime.now())
-    import sys
     import platform
+    import sys
     output["Platform"] = str(platform.platform())
     system_information = sys.version_info
     output["System version"] = "{}.{}".format(system_information.major,

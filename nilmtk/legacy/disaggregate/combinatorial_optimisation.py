@@ -1,14 +1,14 @@
+import copy
+import pickle
 from warnings import warn
 
-import pandas as pd
 import numpy as np
-import pickle
-import copy
+import pandas as pd
 
-from ...utils import find_nearest
-from ...feature_detectors import cluster
-from . import Disaggregator
 from ...datastore import HDFDataStore
+from ...feature_detectors import cluster
+from ...utils import find_nearest
+from . import Disaggregator
 
 
 class CombinatorialOptimisation(Disaggregator):

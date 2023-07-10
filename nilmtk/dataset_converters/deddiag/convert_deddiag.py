@@ -1,13 +1,13 @@
 from os.path import join
 from sys import stdout
-from nilmtk.utils import get_datastore
+
+import pandas as pd
+from nilm_metadata import convert_yaml_to_hdf5, save_yaml_to_datastore
+from pandas import Timestamp
+
 from nilmtk.datastore import Key
 from nilmtk.measurement import LEVEL_NAMES
-from nilmtk.utils import get_module_directory
-from nilm_metadata import convert_yaml_to_hdf5, save_yaml_to_datastore
-import pandas as pd
-
-from pandas import Timestamp
+from nilmtk.utils import get_datastore, get_module_directory
 
 # check whether deddiag-loader package has already installed
 try:
