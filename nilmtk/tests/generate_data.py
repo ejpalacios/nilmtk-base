@@ -116,10 +116,21 @@ for col in MEASUREMENTS:
     )
 
 
-def add_building_metadata(store, elec_meters, key="building1", appliances=[]):
+def add_building_metadata(store, elec_meters):
+    key = "building1"
     node = store.get_node(key)
+    appliances = []
+    for key, value in elec_meters.items():
+        if key != 1:
+            appliance = {
+                "instance": key - 1,
+                "meters": [key],
+                "type": "appliance"
+            }
+            appliances.append(appliance)
     md = {"instance": 1, "elec_meters": elec_meters, "appliances": appliances}
     node._f_setattr("metadata", md)
+    print(node._f_getattr("metadata"))
 
 
 def create_co_test_hdf5():
