@@ -13,14 +13,13 @@ from pandas.plotting import autocorrelation_plot, lag_plot
 from scipy import fft
 from scipy.special import digamma, gamma
 
+from nilmtk.appliance import DEFAULT_ON_POWER_THRESHOLD
+from nilmtk.measurement import select_best_ac_type
+from nilmtk.plots import plot_series
 from nilmtk.preprocessing import Apply
 from nilmtk.stats import histogram_from_generator
-
-from .appliance import DEFAULT_ON_POWER_THRESHOLD
-from .measurement import select_best_ac_type
-from .plots import plot_series
-from .timeframe import TimeFrame
-from .utils import (
+from nilmtk.timeframe.timeframe import TimeFrame
+from nilmtk.utils import (
     append_or_extend_list,
     convert_to_timestamp,
     flatten_2d_list,

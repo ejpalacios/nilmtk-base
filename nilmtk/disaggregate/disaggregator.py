@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from nilmtk.timeframe import TimeFrame, merge_timeframes
+from nilmtk.timeframe.timeframe import TimeFrame, merge_timeframes
 
 
 class Disaggregator(object):

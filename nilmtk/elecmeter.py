@@ -8,21 +8,20 @@ import numpy as np
 import pandas as pd
 
 import nilmtk
-from nilmtk.preprocessing import Clip
-from nilmtk.stats import DropoutRate, GoodSections, TotalEnergy
-
-from .electric import Electric
-from .exceptions import MeasurementError
-from .hashable import Hashable
-from .measurement import (
+from nilmtk.base.node import Node
+from nilmtk.electric import Electric
+from nilmtk.exceptions import MeasurementError
+from nilmtk.hashable import Hashable
+from nilmtk.measurement import (
     PHYSICAL_QUANTITIES,
     check_ac_type,
     check_physical_quantity,
     select_best_ac_type,
 )
-from .node import Node
-from .timeframegroup import TimeFrameGroup
-from .utils import capitalise_first_letter, flatten_2d_list
+from nilmtk.preprocessing import Clip
+from nilmtk.stats import DropoutRate, GoodSections, TotalEnergy
+from nilmtk.timeframe.timeframegroup import TimeFrameGroup
+from nilmtk.utils import capitalise_first_letter, flatten_2d_list
 
 LOGGER = logging.getLogger(__name__)
 

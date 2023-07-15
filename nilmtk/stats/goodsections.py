@@ -3,15 +3,14 @@ import gc
 import numpy as np
 from numpy import concatenate, diff
 
-from nilmtk.node import Node
-from nilmtk.timeframe import (
+from nilmtk.base.node import Node
+from nilmtk.stats.goodsectionsresults import GoodSectionsResults
+from nilmtk.timeframe.timeframe import (
     TimeFrame,
     list_of_timeframes_from_list_of_dicts,
     timeframe_from_dict,
 )
 from nilmtk.utils import timedelta64_to_secs
-
-from .goodsectionsresults import GoodSectionsResults
 
 
 class GoodSections(Node):

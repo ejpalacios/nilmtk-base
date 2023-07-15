@@ -1,10 +1,12 @@
+from abc import abstractmethod
 from io import open
+from typing import Any, Iterator, Optional, Union
 
+import pandas as pd
 import yaml
 
-from nilmtk.timeframe import TimeFrame
-
-MAX_MEM_ALLOWANCE_IN_BYTES = 2**28
+from nilmtk.datastore.memory import MAX_MEM_ALLOWANCE_IN_BYTES
+from nilmtk.timeframe.timeframe import TimeFrame
 
 
 class DataStore(object):
@@ -41,7 +43,8 @@ class DataStore(object):
         """
         self.window = TimeFrame()
 
-    def __getitem__(self, key):
+    @abstractmethod
+    def __getitem__(self, key: str) -> Union[pd.DataFrame, pd.Series]:
         """Loads all of a DataFrame from disk.
 
         Parameters
@@ -56,25 +59,25 @@ class DataStore(object):
         ------
         KeyError if `key` is not found.
         """
-        raise NotImplementedError("NotImplementedError")
 
     @property
-    def window(self):
+    def window(self) -> TimeFrame:
         return self._window
 
     @window.setter
-    def window(self, window):
+    def window(self, window: TimeFrame):
         window.check_tz()
         self._window = window
 
+    @abstractmethod
     def load(
         self,
-        key,
-        columns=None,
+        key: str,
+        columns: Optional[list] = None,
         sections=None,
-        n_look_ahead_rows=0,
-        chunksize=MAX_MEM_ALLOWANCE_IN_BYTES,
-    ):
+        n_look_ahead_rows: int = 0,
+        chunksize: int = MAX_MEM_ALLOWANCE_IN_BYTES,
+    ) -> Iterator[pd.DataFrame]:
         """
         Parameters
         ----------
@@ -111,9 +114,9 @@ class DataStore(object):
         ------
         KeyError if `key` is not in store.
         """
-        raise NotImplementedError("NotImplementedError")
 
-    def append(self, key, value):
+    @abstractmethod
+    def append(self, key: str, value: pd.DataFrame) -> None:
         """
         Parameters
         ----------
@@ -126,27 +129,27 @@ class DataStore(object):
         Append does *not* check if data being appended overlaps with existing
         data in the table, so be careful.
         """
-        raise NotImplementedError("NotImplementedError")
 
-    def put(self, key, value):
+    @abstractmethod
+    def put(self, key: str, value: pd.DataFrame) -> None:
         """
         Parameters
         ----------
         key : str
         value : pd.DataFrame
         """
-        raise NotImplementedError("NotImplementedError")
 
-    def remove(self, key, value):
+    @abstractmethod
+    def remove(self, key: str, value: pd.DataFrame) -> None:
         """
         Parameters
         ----------
         key : str
         value : pd.DataFrame
         """
-        raise NotImplementedError("NotImplementedError")
 
-    def load_metadata(self, key="/"):
+    @abstractmethod
+    def load_metadata(self, key: str = "/") -> dict:
         """
         Parameters
         ----------
@@ -157,46 +160,52 @@ class DataStore(object):
         -------
         metadata : dict
         """
-        raise NotImplementedError("NotImplementedError")
 
-    def save_metadata(self, key, metadata):
+    @abstractmethod
+    def save_metadata(self, key: str, metadata: dict) -> None:
         """
         Parameters
         ----------
         key : string
         metadata : dict
         """
-        raise NotImplementedError("NotImplementedError")
 
-    def elements_below_key(self, key="/"):
+    @abstractmethod
+    def elements_below_key(self, key: str = "/") -> list[str]:
         """
         Returns
         -------
         list of strings
         """
 
-    def close(self):
-        raise NotImplementedError("NotImplementedError")
+    @abstractmethod
+    def close(self) -> None:
+        """
+        Close data store
+        """
 
-    def open(self):
-        raise NotImplementedError("NotImplementedError")
+    @abstractmethod
+    def open(self) -> None:
+        """
+        Close data store
+        """
 
-    def get_timeframe(self, key):
+    @abstractmethod
+    def get_timeframe(self, key: str) -> TimeFrame:
         """
         Returns
         -------
         nilmtk.TimeFrame of entire table after intersecting with self.window.
         """
-        raise NotImplementedError("NotImplementedError")
 
 
-def write_yaml_to_file(metadata_filename, metadata):
+def write_yaml_to_file(metadata_filename, metadata) -> None:
     metadata_file = open(metadata_filename, "w")
     yaml.dump(metadata, metadata_file)
     metadata_file.close()
 
 
-def join_key(*args):
+def join_key(*args) -> str:
     """
     Examples
     --------
@@ -219,7 +228,7 @@ def join_key(*args):
     return key
 
 
-def convert_datastore(input_store, output_store):
+def convert_datastore(input_store: DataStore, output_store: DataStore):
     """
     Parameters
     ----------

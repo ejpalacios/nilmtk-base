@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # NILMTK imports
-from .consts import SECS_PER_DAY
-from .timeframe import TimeFrame
+from nilmtk.consts import SECS_PER_DAY
+from nilmtk.timeframe.timeframe import TimeFrame
 
 
 class TimeFrameGroup(list):

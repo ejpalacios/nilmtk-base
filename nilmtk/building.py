@@ -3,9 +3,8 @@ from collections import OrderedDict, namedtuple
 import pandas as pd
 
 from nilmtk.datastore.datastore import join_key
-
-from .hashable import Hashable
-from .metergroup import MeterGroup
+from nilmtk.hashable import Hashable
+from nilmtk.metergroup import MeterGroup
 
 BuildingID = namedtuple("BuildingID", ["instance", "dataset"])
 

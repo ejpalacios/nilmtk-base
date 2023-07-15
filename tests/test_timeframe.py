@@ -2,7 +2,7 @@ import unittest
 
 import pandas as pd
 
-from nilmtk.timeframe import TimeFrame, merge_timeframes
+from nilmtk.timeframe.timeframe import TimeFrame, merge_timeframes
 
 
 class TestTimeFrame(unittest.TestCase):

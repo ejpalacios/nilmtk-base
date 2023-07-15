@@ -1,6 +1,6 @@
 import unittest
 
-from nilmtk.node import find_unsatisfied_requirements
+from nilmtk.base.node import find_unsatisfied_requirements
 
 
 class TestNode(unittest.TestCase):

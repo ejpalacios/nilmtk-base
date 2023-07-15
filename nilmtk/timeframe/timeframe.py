@@ -1,6 +1,7 @@
 from copy import deepcopy
 from datetime import timedelta
 from functools import total_ordering
+from typing import Optional
 from warnings import warn
 
 import pandas as pd
@@ -27,7 +28,17 @@ class TimeFrame(object):
     include_end : boolean
     """
 
-    def __init__(self, start=None, end=None, tz=None):
+    def __init__(
+        self,
+        start: Optional[pd.Timestamp] = None,
+        end: Optional[pd.Timestamp] = None,
+        tz=None,
+    ):
+        self.enabled: bool
+        self._start: Optional[pd.Timestamp]
+        self._end: Optional[pd.Timestamp]
+        self._empty: bool
+
         self.clear()
         if isinstance(start, TimeFrame):
             self.copy_constructor(start)
@@ -41,11 +52,11 @@ class TimeFrame(object):
                 if self._end:
                     self._end = self._end.tz_localize(tz)
 
-    def copy_constructor(self, other):
+    def copy_constructor(self, other) -> None:
         for key, value in other.__dict__.items():
             setattr(self, key, value)
 
-    def clear(self):
+    def clear(self) -> None:
         self.enabled = True
         self._start = None
         self._end = None

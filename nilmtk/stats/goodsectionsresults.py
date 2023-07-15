@@ -3,9 +3,13 @@ from datetime import timedelta
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from nilmtk.results import Results
-from nilmtk.timeframe import TimeFrame, convert_nat_to_none, convert_none_to_nat
-from nilmtk.timeframegroup import TimeFrameGroup
+from nilmtk.base.results import Results
+from nilmtk.timeframe.timeframe import (
+    TimeFrame,
+    convert_nat_to_none,
+    convert_none_to_nat,
+)
+from nilmtk.timeframe.timeframegroup import TimeFrameGroup
 from nilmtk.utils import get_tz, tz_localize_naive
 
 

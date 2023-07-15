@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
+from nilmtk.base.results import Results
 from nilmtk.consts import SECS_PER_DAY
-from nilmtk.results import Results
 
 
 class DropoutRateResults(Results):

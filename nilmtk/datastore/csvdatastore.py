@@ -6,28 +6,22 @@ from os import listdir, makedirs, remove
 from os.path import dirname, exists, isdir, isfile, join
 from shutil import rmtree
 from time import time
+from typing import Any, Iterator, Optional, Union
 
 import numpy as np
 import pandas as pd
 import yaml
 from nilm_metadata.convert_yaml_to_hdf5 import _load_file
 
-from nilmtk.docinherit import doc_inherit
-from nilmtk.node import Node
-from nilmtk.timeframe import TimeFrame
-from nilmtk.timeframegroup import TimeFrameGroup
-
-from .datastore import (
-    MAX_MEM_ALLOWANCE_IN_BYTES,
-    DataStore,
-    join_key,
-    write_yaml_to_file,
-)
-from .key import Key
+from nilmtk.datastore.datastore import DataStore, join_key, write_yaml_to_file
+from nilmtk.datastore.key import Key
+from nilmtk.datastore.memory import MAX_MEM_ALLOWANCE_IN_BYTES
+from nilmtk.timeframe.timeframe import TimeFrame
+from nilmtk.timeframe.timeframegroup import TimeFrameGroup
 
 
 class CSVDataStore(DataStore):
-    def __init__(self, filename):
+    def __init__(self, filename: str):
         self.filename = filename
         # make root directory
         path = self._key_to_abs_path("/")
@@ -39,23 +33,21 @@ class CSVDataStore(DataStore):
             makedirs(path)
         super(CSVDataStore, self).__init__()
 
-    @doc_inherit
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Union[pd.DataFrame, pd.Series]:
         file_path = self._key_to_abs_path(key)
         if isfile(file_path):
             return pd.read_csv(file_path)
         else:
             raise KeyError("{} not found".format(key))
 
-    @doc_inherit
     def load(
         self,
-        key,
-        columns=None,
+        key: str,
+        columns: Optional[list] = None,
         sections=None,
-        n_look_ahead_rows=0,
-        chunksize=MAX_MEM_ALLOWANCE_IN_BYTES,
-    ):
+        n_look_ahead_rows: int = 0,
+        chunksize: int = MAX_MEM_ALLOWANCE_IN_BYTES,
+    ) -> Iterator[pd.DataFrame]:
         file_path = self._key_to_abs_path(key)
 
         # Set `sections` variable
@@ -83,7 +75,7 @@ class CSVDataStore(DataStore):
                         chunk = chunk[columns]
 
                     # mask chunk by window and section intersect
-                    subchunk_idx = [True] * len(chunk)
+                    subchunk_idx = np.ones(len(chunk), dtype=bool)
                     if window_intersect.start:
                         subchunk_idx = np.logical_and(
                             subchunk_idx, (chunk.index >= window_intersect.start)
@@ -93,11 +85,11 @@ class CSVDataStore(DataStore):
                             subchunk_idx, (chunk.index < window_intersect.end)
                         )
                     if window_intersect.empty:
-                        subchunk_idx = [False] * len(chunk)
+                        subchunk_idx = np.zeros(len(chunk), dtype=bool)
                     subchunk = chunk[subchunk_idx]
 
                     if len(subchunk) > 0:
-                        subchunk_end = np.max(np.nonzero(subchunk_idx))
+                        subchunk_end = int(np.max(np.nonzero(subchunk_idx)))
                         subchunk.attrs["timeframe"] = TimeFrame(
                             subchunk.index[0], subchunk.index[-1]
                         )
@@ -125,32 +117,28 @@ class CSVDataStore(DataStore):
 
                         yield subchunk
 
-    @doc_inherit
-    def append(self, key, value):
+    def append(self, key: str, value: pd.DataFrame) -> None:
         file_path = self._key_to_abs_path(key)
         path = dirname(file_path)
         if not exists(path):
             makedirs(path)
         value.to_csv(file_path, mode="a", header=True)
 
-    @doc_inherit
-    def put(self, key, value):
+    def put(self, key: str, value: pd.DataFrame) -> None:
         file_path = self._key_to_abs_path(key)
         path = dirname(file_path)
         if not exists(path):
             makedirs(path)
         value.to_csv(file_path, mode="w", header=True)
 
-    @doc_inherit
-    def remove(self, key):
+    def remove(self, key: str, value: pd.DataFrame) -> None:
         file_path = self._key_to_abs_path(key)
         if isfile(file_path):
             remove(file_path)
         else:
             rmtree(file_path)
 
-    @doc_inherit
-    def load_metadata(self, key="/"):
+    def load_metadata(self, key: str = "/") -> dict:
         if key == "/":
             filepath = self._get_metadata_path()
             metadata = _load_file(filepath, "dataset.yaml")
@@ -177,8 +165,7 @@ class CSVDataStore(DataStore):
 
         return metadata
 
-    @doc_inherit
-    def save_metadata(self, key, metadata):
+    def save_metadata(self, key: str, metadata: dict) -> None:
         if key == "/":
             # Extract meter_devices
             meter_devices_metadata = metadata["meter_devices"]
@@ -200,8 +187,7 @@ class CSVDataStore(DataStore):
             )
             write_yaml_to_file(metadata_filename, metadata)
 
-    @doc_inherit
-    def elements_below_key(self, key="/"):
+    def elements_below_key(self, key: str = "/") -> list[str]:
         elements = []
         if key == "/":
             for directory in listdir(self.filename):
@@ -217,18 +203,15 @@ class CSVDataStore(DataStore):
 
         return elements
 
-    @doc_inherit
-    def close(self):
+    def close(self) -> None:
         # not needed for CSV data store
         pass
 
-    @doc_inherit
-    def open(self):
+    def open(self) -> None:
         # not needed for CSV data store
         pass
 
-    @doc_inherit
-    def get_timeframe(self, key):
+    def get_timeframe(self, key: str) -> TimeFrame:
         file_path = self._key_to_abs_path(key)
         text_file_reader = pd.read_csv(
             file_path,
@@ -246,10 +229,10 @@ class CSVDataStore(DataStore):
         timeframe = TimeFrame(start, end)
         return self.window.intersection(timeframe)
 
-    def _get_metadata_path(self):
+    def _get_metadata_path(self) -> str:
         return join(self.filename, "metadata")
 
-    def _key_to_abs_path(self, key):
+    def _key_to_abs_path(self, key: str) -> str:
         abs_path = self.filename
         if key and len(key) > 1:
             relative_path = key

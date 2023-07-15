@@ -1,6 +1,6 @@
 from warnings import warn
 
-from nilmtk.node import Node
+from nilmtk.base.node import Node
 from nilmtk.utils import index_of_column_name
 
 

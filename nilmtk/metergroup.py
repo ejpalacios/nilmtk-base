@@ -14,26 +14,24 @@ from matplotlib import MatplotlibDeprecationWarning
 from matplotlib.sankey import Sankey
 from matplotlib.ticker import FuncFormatter
 
-from nilmtk.datastore import MAX_MEM_ALLOWANCE_IN_BYTES
-from nilmtk.datastore.datastore import join_key
-from nilmtk.preprocessing import Apply
-
-from .appliance import Appliance
+from nilmtk.appliance import Appliance
 
 # NILMTK imports
-from .elecmeter import ElecMeter, ElecMeterID
-from .electric import Electric
-from .exceptions import MeasurementError
-from .measurement import (
+from nilmtk.datastore.memory import MAX_MEM_ALLOWANCE_IN_BYTES
+from nilmtk.elecmeter import ElecMeter, ElecMeterID
+from nilmtk.electric import Electric
+from nilmtk.exceptions import MeasurementError
+from nilmtk.measurement import (
     AC_TYPES,
     LEVEL_NAMES,
     PHYSICAL_QUANTITIES_TO_AVERAGE,
     select_best_ac_type,
 )
-from .plots import plot_series
-from .timeframe import TimeFrame, split_timeframes
-from .timeframegroup import TimeFrameGroup
-from .utils import (
+from nilmtk.plots import plot_series
+from nilmtk.preprocessing import Apply
+from nilmtk.timeframe.timeframe import TimeFrame, split_timeframes
+from nilmtk.timeframe.timeframegroup import TimeFrameGroup
+from nilmtk.utils import (
     append_or_extend_list,
     capitalise_first_letter,
     convert_to_list,

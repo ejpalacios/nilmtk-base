@@ -1,7 +1,7 @@
 import pandas as pd
 
+from nilmtk.base.results import Results
 from nilmtk.measurement import AC_TYPES
-from nilmtk.results import Results
 
 
 class TotalEnergyResults(Results):

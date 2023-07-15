@@ -40,8 +40,8 @@ from warnings import warn
 import numpy as np
 import pandas as pd
 
-from .electric import align_two_meters
-from .metergroup import MeterGroup, iterate_through_submeters_of_two_metergroups
+from nilmtk.electric import align_two_meters
+from nilmtk.metergroup import MeterGroup, iterate_through_submeters_of_two_metergroups
 
 
 def error_in_assigned_energy(predictions, ground_truth):

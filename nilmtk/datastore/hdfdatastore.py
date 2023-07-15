@@ -2,40 +2,38 @@ import logging
 import warnings
 from copy import deepcopy
 from os.path import isfile
+from typing import Any, Iterator, Literal, Optional, Union, cast
 
 import numpy as np
 import pandas as pd
 
-from nilmtk.docinherit import doc_inherit
-from nilmtk.timeframe import TimeFrame
-from nilmtk.timeframegroup import TimeFrameGroup
-
-from .datastore import MAX_MEM_ALLOWANCE_IN_BYTES, DataStore
+from nilmtk.datastore.datastore import DataStore
+from nilmtk.datastore.memory import MAX_MEM_ALLOWANCE_IN_BYTES
+from nilmtk.timeframe.timeframe import TimeFrame
+from nilmtk.timeframe.timeframegroup import TimeFrameGroup
 
 LOGGER = logging.getLogger(__name__)
 
 
 class HDFDataStore(DataStore):
-    def __init__(self, filename, mode="r"):
+    def __init__(self, filename: str, mode: Literal["a", "w", "r", "r+"] = "r"):
         if mode in ["r", "a"] and not isfile(filename):
             raise IOError("No such file as " + filename)
 
         self.store = pd.HDFStore(filename, mode, complevel=9, complib="blosc")
         super(HDFDataStore, self).__init__()
 
-    @doc_inherit
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Union[pd.DataFrame, pd.Series]:
         return self.store[key]
 
-    @doc_inherit
     def load(
         self,
-        key,
-        columns=None,
+        key: str,
+        columns: Optional[list] = None,
         sections=None,
-        n_look_ahead_rows=0,
-        chunksize=MAX_MEM_ALLOWANCE_IN_BYTES,
-    ):
+        n_look_ahead_rows: int = 0,
+        chunksize: int = MAX_MEM_ALLOWANCE_IN_BYTES,
+    ) -> Iterator[pd.DataFrame]:
         # TODO: calculate chunksize default based on physical
         # memory installed and number of columns
 
@@ -44,9 +42,6 @@ class HDFDataStore(DataStore):
             key = "/" + key
         if len(key) > 1 and key[-1] == "/":
             key = key[:-1]
-
-        # Make sure chunksize is an int otherwise `range` complains later.
-        chunksize = np.int64(chunksize)
 
         # Set `sections` variable
         sections = [TimeFrame()] if sections is None else sections
@@ -160,8 +155,7 @@ class HDFDataStore(DataStore):
                 yield data
                 del data
 
-    @doc_inherit
-    def append(self, key, value):
+    def append(self, key: str, value: pd.DataFrame):
         """
         Parameters
         ----------
@@ -177,17 +171,14 @@ class HDFDataStore(DataStore):
         self.store.append(key=key, value=value)
         self.store.flush()
 
-    @doc_inherit
-    def put(self, key, value):
+    def put(self, key: str, value: pd.DataFrame):
         self.store.put(key, value, format="table", index=False)
         self.store.create_table_index(key, columns=["index"], kind="full", optlevel=9)
         self.store.flush()
 
-    @doc_inherit
     def remove(self, key):
         self.store.remove(key)
 
-    @doc_inherit
     def load_metadata(self, key="/"):
         if key == "/":
             node = self.store.root
@@ -197,7 +188,6 @@ class HDFDataStore(DataStore):
         metadata = deepcopy(node._v_attrs.metadata)
         return metadata
 
-    @doc_inherit
     def save_metadata(self, key, metadata):
         if key == "/":
             node = self.store.root
@@ -207,7 +197,6 @@ class HDFDataStore(DataStore):
         node._v_attrs.metadata = metadata
         self.store.flush()
 
-    @doc_inherit
     def elements_below_key(self, key="/"):
         if key == "/" or not key:
             node = self.store.root
@@ -215,15 +204,12 @@ class HDFDataStore(DataStore):
             node = self.store.get_node(key)
         return list(node._v_children.keys())
 
-    @doc_inherit
     def close(self):
         self.store.close()
 
-    @doc_inherit
     def open(self, mode="a"):
         self.store.open(mode=mode)
 
-    @doc_inherit
     def get_timeframe(self, key):
         """
         Returns

@@ -5,8 +5,8 @@ from warnings import warn
 
 from nilm_metadata import get_appliance_types
 
-from .hashable import Hashable
-from .utils import flatten_2d_list
+from nilmtk.hashable import Hashable
+from nilmtk.utils import flatten_2d_list
 
 ApplianceID = namedtuple("ApplianceID", ["type", "instance"])
 DEFAULT_ON_POWER_THRESHOLD = 10

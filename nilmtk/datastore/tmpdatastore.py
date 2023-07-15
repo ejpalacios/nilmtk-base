@@ -1,9 +1,8 @@
 import os
 import tempfile
 
+from nilmtk.datastore.hdfdatastore import HDFDataStore
 from nilmtk.docinherit import doc_inherit
-
-from .hdfdatastore import HDFDataStore
 
 
 class TmpDataStore(HDFDataStore):
