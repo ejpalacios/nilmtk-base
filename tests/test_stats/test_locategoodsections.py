@@ -11,6 +11,7 @@ from nilmtk.datastore import HDFDataStore
 from nilmtk.elecmeter import ElecMeterID
 from nilmtk.stats import GoodSections
 from nilmtk.stats.goodsectionsresults import GoodSectionsResults
+
 from ..testingtools import data_dir
 
 METER_ID = ElecMeterID(instance=1, building=1, dataset="REDD")

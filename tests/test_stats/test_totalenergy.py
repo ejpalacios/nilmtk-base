@@ -11,8 +11,9 @@ from nilmtk import ElecMeter, HDFDataStore, TimeFrame
 from nilmtk.consts import JOULES_PER_KWH
 from nilmtk.elecmeter import ElecMeterID
 from nilmtk.preprocessing import Clip
-from ..testingtools import data_dir
 from nilmtk.stats.totalenergy import TotalEnergy, _energy_for_power_series
+
+from ..testingtools import data_dir
 
 METER_ID = ElecMeterID(instance=1, building=1, dataset="REDD")
 
