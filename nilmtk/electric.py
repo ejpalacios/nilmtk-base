@@ -211,9 +211,10 @@ class Electric(object):
 
     def _set_sample_period(self, timeframe, width=800, **kwargs):
         # Calculate the resolution for the x axis
-        duration = timeframe.timedelta.total_seconds()
-        secs_per_pixel = int(round(duration / width))
-        kwargs.update({"sample_period": secs_per_pixel, "resample": True})
+        if kwargs.get("sample_period", None) is None:
+            duration = timeframe.timedelta.total_seconds()
+            secs_per_pixel = int(round(duration / width))
+            kwargs.update({"sample_period": secs_per_pixel, "resample": True})
         return kwargs
 
     def proportion_of_upstream(self, **load_kwargs):
