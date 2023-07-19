@@ -2,12 +2,12 @@ import logging
 import warnings
 from copy import deepcopy
 from os.path import isfile
-from typing import Any, Iterator, Literal, Optional, Union, cast
+from typing import Iterator, Literal, Optional, Union
 
 import numpy as np
 import pandas as pd
 
-from nilmtk.datastore.datastore import DataStore
+from nilmtk.base.datastore import DataStore
 from nilmtk.datastore.memory import MAX_MEM_ALLOWANCE_IN_BYTES
 from nilmtk.timeframe.timeframe import TimeFrame
 from nilmtk.timeframe.timeframegroup import TimeFrameGroup
@@ -73,7 +73,7 @@ class HDFDataStore(DataStore):
             terms = window_intersect.query_terms("window_intersect")
             if terms is None:
                 section_start_i = 0
-                section_end_i = self.store.get_storer(key).nrows
+                section_end_i = self.store.get_storer(key).nrows  # type: ignore
                 if section_end_i <= 1:
                     data = pd.DataFrame()
                     data.attrs["timeframe"] = section
@@ -81,7 +81,7 @@ class HDFDataStore(DataStore):
                     continue
             else:
                 try:
-                    coords = self.store.select_as_coordinates(key=key, where=terms)
+                    coords = self.store.select_as_coordinates(key=key, where=terms)  # type: ignore
                 except AttributeError as e:
                     if str(e) == (
                         "'NoneType' object has no attribute " "'read_coordinates'"
@@ -116,7 +116,7 @@ class HDFDataStore(DataStore):
 
                 data = self.store.select(
                     key=key, columns=columns, start=chunk_start_i, stop=chunk_end_i
-                )
+                )  # type: ignore
 
                 # if len(data) <= 2:
                 #     yield pd.DataFrame()
@@ -149,7 +149,7 @@ class HDFDataStore(DataStore):
 
                     data.attrs["look_ahead"] = look_ahead
 
-                data.attrs["timeframe"] = _timeframe_for_chunk(
+                data.attrs["timeframe"] = self._timeframe_for_chunk(
                     there_are_more_subchunks, chunk_i, window_intersect, data.index
                 )
                 yield data
@@ -169,12 +169,12 @@ class HDFDataStore(DataStore):
         data in the table, so be careful.
         """
         self.store.append(key=key, value=value)
-        self.store.flush()
+        self.store.flush()  # type: ignore
 
     def put(self, key: str, value: pd.DataFrame):
         self.store.put(key, value, format="table", index=False)
-        self.store.create_table_index(key, columns=["index"], kind="full", optlevel=9)
-        self.store.flush()
+        self.store.create_table_index(key, columns=["index"], kind="full", optlevel=9)  # type: ignore
+        self.store.flush()  # type: ignore
 
     def remove(self, key):
         self.store.remove(key)
@@ -314,26 +314,28 @@ class HDFDataStore(DataStore):
         if key not in self._keys():
             raise KeyError(key + " not in store")
 
+    @staticmethod
+    def _timeframe_for_chunk(
+        there_are_more_subchunks, chunk_i, window_intersect, index
+    ):
+        start = None
+        end = None
 
-def _timeframe_for_chunk(there_are_more_subchunks, chunk_i, window_intersect, index):
-    start = None
-    end = None
-
-    # Test if there are any more subchunks
-    if there_are_more_subchunks:
-        if chunk_i == 0:
+        # Test if there are any more subchunks
+        if there_are_more_subchunks:
+            if chunk_i == 0:
+                start = window_intersect.start
+        elif chunk_i > 0:
+            # This is the last subchunk
+            end = window_intersect.end
+        else:
+            # Just a single 'subchunk'
             start = window_intersect.start
-    elif chunk_i > 0:
-        # This is the last subchunk
-        end = window_intersect.end
-    else:
-        # Just a single 'subchunk'
-        start = window_intersect.start
-        end = window_intersect.end
+            end = window_intersect.end
 
-    if start is None:
-        start = index[0]
-    if end is None:
-        end = index[-1]
+        if start is None:
+            start = index[0]
+        if end is None:
+            end = index[-1]
 
-    return TimeFrame(start, end)
+        return TimeFrame(start, end)

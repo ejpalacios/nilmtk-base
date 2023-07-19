@@ -34,7 +34,6 @@ Functions
 
 """
 
-import math
 from warnings import warn
 
 import numpy as np
@@ -188,7 +187,7 @@ def rms_error_power(predictions, ground_truth):
             sum_of_squared_diff += (diff**2).sum()
             n_samples += len(diff)
 
-        error[pred_meter.instance()] = math.sqrt(sum_of_squared_diff / n_samples)
+        error[pred_meter.instance()] = np.sqrt(sum_of_squared_diff / n_samples)
 
     return pd.Series(error)
 

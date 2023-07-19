@@ -1,8 +1,8 @@
-from nilmtk.datastore import CSVDataStore, DataStore, HDFDataStore, Key, TmpDataStore
+from nilmtk.datastore import CSVDataStore, HDFDataStore, Key, TmpDataStore
 
+from nilmtk.dataset import DataSet
 from nilmtk.appliance import Appliance
 from nilmtk.building import Building
-from nilmtk.dataset import DataSet
 from nilmtk.elecmeter import ElecMeter
 from nilmtk.metergroup import MeterGroup
 from nilmtk.timeframe.timeframe import TimeFrame

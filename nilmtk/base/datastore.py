@@ -1,15 +1,13 @@
-from abc import abstractmethod
-from io import open
-from typing import Any, Iterator, Optional, Union
+from abc import ABC, abstractmethod
+from typing import Iterator, Optional, Union
 
 import pandas as pd
-import yaml
 
 from nilmtk.datastore.memory import MAX_MEM_ALLOWANCE_IN_BYTES
 from nilmtk.timeframe.timeframe import TimeFrame
 
 
-class DataStore(object):
+class DataStore(ABC):
     """
     Provides a common interface to all physical data stores.
     Supports hierarchical stores.
@@ -198,34 +196,28 @@ class DataStore(object):
         nilmtk.TimeFrame of entire table after intersecting with self.window.
         """
 
+    @staticmethod
+    def join_key(*args) -> str:
+        """
+        Examples
+        --------
+        >>> join_key('building1', 'elec', 'meter1')
+        '/building1/elec/meter1'
 
-def write_yaml_to_file(metadata_filename, metadata) -> None:
-    metadata_file = open(metadata_filename, "w")
-    yaml.dump(metadata, metadata_file)
-    metadata_file.close()
+        >>> join_key('/')
+        '/'
 
-
-def join_key(*args) -> str:
-    """
-    Examples
-    --------
-    >>> join_key('building1', 'elec', 'meter1')
-    '/building1/elec/meter1'
-
-    >>> join_key('/')
-    '/'
-
-    >>> join_key('')
-    '/'
-    """
-    key = "/"
-    for arg in args:
-        arg_stripped = str(arg).strip("/")
-        if arg_stripped:
-            key += arg_stripped + "/"
-    if len(key) > 1:
-        key = key[:-1]  # remove last trailing slash
-    return key
+        >>> join_key('')
+        '/'
+        """
+        key = "/"
+        for arg in args:
+            arg_stripped = str(arg).strip("/")
+            if arg_stripped:
+                key += arg_stripped + "/"
+        if len(key) > 1:
+            key = key[:-1]  # remove last trailing slash
+        return key
 
 
 def convert_datastore(input_store: DataStore, output_store: DataStore):

@@ -1,7 +1,6 @@
 import numpy as np
 
 from nilmtk.base.node import Node
-from nilmtk.exceptions import TooFewSamplesError
 from nilmtk.stats.dropoutrateresults import DropoutRateResults
 from nilmtk.utils import get_index
 

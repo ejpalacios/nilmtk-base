@@ -1,10 +1,8 @@
 import os
-from datetime import datetime
-
-from nilmtk.timeframe.timeframe import TimeFrame, merge_timeframes
+from abc import ABC, abstractmethod
 
 
-class Disaggregator(object):
+class Disaggregator(ABC):
     """Provides a common interface to all disaggregation classes.
 
     See https://github.com/nilmtk/nilmtk/issues/755 for discussion
@@ -22,6 +20,7 @@ class Disaggregator(object):
     # file_prefix is used to track temporary files
     file_prefix = None
 
+    @abstractmethod
     def partial_fit(self, train_mains, train_appliances, **load_kwargs):
         """Trains the model given a metergroup containing appliance meters
         (supervised) or a site meter (unsupervised).  Will have a
@@ -32,15 +31,14 @@ class Disaggregator(object):
                         the same pd.DatetimeIndex as index as train_main and
                         the same 1 or more power columns as train_main
         """
-        raise NotImplementedError()
 
+    @abstractmethod
     def disaggregate_chunk(self, test_mains):
         """Passes each chunk from mains generator to disaggregate_chunk()
         Parameters
         ----------
         test_mains : list of pd.DataFrames
         """
-        raise NotImplementedError()
 
     def call_preprocessing(self, train_mains, train_appliances):
         """Calls the preprocessing functions of this algorithm and returns the
@@ -55,21 +53,21 @@ class Disaggregator(object):
         """
         return train_mains, train_appliances
 
+    @abstractmethod
     def save_model(self, folder_name):
         """Passes each chunk from mains generator to disaggregate_chunk()
         Parameters
         ----------
         test_mains : list of pd.DataFrames
         """
-        raise NotImplementedError()
 
+    @abstractmethod
     def load_model(self, folder_name):
         """Passes each chunk from mains generator to disaggregate_chunk()
         Parameters
         ----------
         test_mains : list of pd.DataFrames
         """
-        raise NotImplementedError()
 
     def clear_model_checkpoints(self):
         """

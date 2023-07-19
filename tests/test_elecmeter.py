@@ -1,6 +1,4 @@
 import unittest
-import warnings
-from datetime import timedelta
 from os.path import join
 
 import pandas as pd

@@ -6,7 +6,6 @@ from nilmtk.base.node import Node
 from nilmtk.consts import JOULES_PER_KWH
 from nilmtk.measurement import AC_TYPES
 from nilmtk.stats.totalenergyresults import TotalEnergyResults
-from nilmtk.timeframe.timeframe import TimeFrame
 from nilmtk.utils import timedelta64_to_secs
 
 

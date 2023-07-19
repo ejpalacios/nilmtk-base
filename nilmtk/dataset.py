@@ -1,11 +1,13 @@
 from collections import OrderedDict
+from typing import Literal, Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from nilmtk.base import DataStore
 from nilmtk.building import Building
+from nilmtk.datastore import CSVDataStore, HDFDataStore
 from nilmtk.timeframe.timeframe import TimeFrame
-from nilmtk.utils import get_datastore
 
 
 class DataSet(object):
@@ -197,3 +199,36 @@ class DataSet(object):
                 del starts, ends
 
         store.close()
+
+
+def get_datastore(
+    filename: str,
+    format: Optional[str] = None,
+    mode: Literal["a", "w", "r", "r+"] = "r",
+) -> DataStore:
+    """
+    Parameters
+    ----------
+    filename : string
+    format : 'CSV' or 'HDF', default: infer from filename ending.
+    mode : 'r' (read-only), 'a' (append) or 'w' (write), default: 'r'
+
+    Returns
+    -------
+    metadata : dict
+    """
+    if not format:
+        if filename.endswith(".h5"):
+            format = "HDF"
+        elif filename.endswith(".csv"):
+            format = "CSV"
+
+    if filename is not None:
+        if format == "HDF":
+            return HDFDataStore(filename, mode)
+        elif format == "CSV":
+            return CSVDataStore(filename)
+        else:
+            raise ValueError("format not recognised")
+    else:
+        ValueError("filename is None")

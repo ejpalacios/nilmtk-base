@@ -1,27 +1,21 @@
 import gc
-from collections import Counter
-from datetime import timedelta
-from math import log, pi
+from math import log
 from warnings import warn
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import pytz
 import scipy.spatial as ss
 from pandas.plotting import autocorrelation_plot, lag_plot
 from scipy import fft
-from scipy.special import digamma, gamma
+from scipy.special import digamma
 
 from nilmtk.appliance import DEFAULT_ON_POWER_THRESHOLD
 from nilmtk.measurement import select_best_ac_type
-from nilmtk.plots import plot_series
 from nilmtk.preprocessing import Apply
 from nilmtk.stats import histogram_from_generator
 from nilmtk.timeframe.timeframe import TimeFrame
 from nilmtk.utils import (
-    append_or_extend_list,
-    convert_to_timestamp,
     flatten_2d_list,
     offset_alias_to_seconds,
     safe_resample,

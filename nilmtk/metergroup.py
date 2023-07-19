@@ -20,28 +20,17 @@ from nilmtk.appliance import Appliance
 from nilmtk.datastore.memory import MAX_MEM_ALLOWANCE_IN_BYTES
 from nilmtk.elecmeter import ElecMeter, ElecMeterID
 from nilmtk.electric import Electric
-from nilmtk.exceptions import MeasurementError
-from nilmtk.measurement import (
-    AC_TYPES,
-    LEVEL_NAMES,
-    PHYSICAL_QUANTITIES_TO_AVERAGE,
-    select_best_ac_type,
-)
-from nilmtk.plots import plot_series
-from nilmtk.preprocessing import Apply
-from nilmtk.timeframe.timeframe import TimeFrame, split_timeframes
-from nilmtk.timeframe.timeframegroup import TimeFrameGroup
+from nilmtk.measurement import AC_TYPES, LEVEL_NAMES, PHYSICAL_QUANTITIES_TO_AVERAGE
+from nilmtk.timeframe.timeframe import split_timeframes
 from nilmtk.utils import (
     append_or_extend_list,
     capitalise_first_letter,
     convert_to_list,
-    convert_to_timestamp,
     flatten_2d_list,
     most_common,
     nodes_adjacent_to_root,
     normalise_timestamp,
     simplest_type_for,
-    tree_root,
 )
 
 # MeterGroupID.meters is a tuple of ElecMeterIDs.  Order doesn't matter.
@@ -1217,7 +1206,8 @@ class MeterGroup(Electric):
         meter_identifiers = list(self.identifier.meters)
         energy_per_meter = pd.DataFrame(columns=meter_identifiers, index=AC_TYPES)
         n_meters = len(self.meters)
-        load_kwargs.setdefault("ac_type", "best")
+        if load_kwargs.get("ac_type", None) is None:
+            load_kwargs.setdefault("ac_type", "best")
         for i, meter in enumerate(self.meters):
             LOGGER.debug(f"\r{i+1}/{n_meters} {meter}")
             stdout.flush()
@@ -1230,7 +1220,7 @@ class MeterGroup(Electric):
                 )
             energy_per_meter[meter.identifier] = meter_energy
 
-        energy_per_meters = energy_per_meter.dropna(how="all")
+        energy_per_meter = energy_per_meter.dropna(how="all")
 
         if use_meter_labels:
             energy_per_meter.columns = self.get_labels(energy_per_meter.columns)
@@ -1497,7 +1487,7 @@ class MeterGroup(Electric):
             ax = function_map[kind](**kwargs)
         except KeyError:
             raise ValueError(
-                "'{}' not a valid setting for 'kind' parameter.".format(kind)
+                f"{kind} not a valid setting for 'kind' parameter. Available types are: {function_map.keys()}"
             )
         return ax
 
@@ -1511,7 +1501,7 @@ class MeterGroup(Electric):
             plt.legend()
         return ax
 
-    def _plot_sankey(self):
+    def _plot_sankey(self, **load_kwargs):
         """
         Computes parameters like fraction of energy, labels and orientations
         from elecmeter object and calls matplotlib.sankey function to plot
@@ -1603,7 +1593,6 @@ class MeterGroup(Electric):
         meter_identifiers = list(self.identifier.meters)
         fig, ax = plt.subplots()
         for i, meter in enumerate(self.meters):
-            id_meter = meter.identifier
             for chunk_when_on in meter.when_on(**load_kwargs):
                 series_to_plot = chunk_when_on[chunk_when_on == True]
                 if len(series_to_plot.index):
@@ -1671,7 +1660,7 @@ class MeterGroup(Electric):
 
         return ax
 
-    def _plot_energy_bar(self, ax=None, mains=None):
+    def _plot_energy_bar(self, ax=None, mains=None, **load_kwargs):
         """Plot a stacked bar of the energy per meter, in order.
 
         Parameters
@@ -1685,10 +1674,10 @@ class MeterGroup(Electric):
         ax
         """
         energy = self.energy_per_meter(
-            mains=mains, per_period="D", use_meter_labels=True
+            mains=mains, per_period="D", use_meter_labels=True, **load_kwargs
         )
 
-        energy.sort(ascending=False)
+        energy.sort_values(ascending=False)
 
         # Plot
         ax = pd.DataFrame(energy).T.plot(

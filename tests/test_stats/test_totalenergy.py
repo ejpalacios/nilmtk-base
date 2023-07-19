@@ -6,8 +6,7 @@ from os.path import join
 import numpy as np
 import pandas as pd
 
-import nilmtk
-from nilmtk import ElecMeter, HDFDataStore, TimeFrame
+from nilmtk import ElecMeter, HDFDataStore
 from nilmtk.consts import JOULES_PER_KWH
 from nilmtk.elecmeter import ElecMeterID
 from nilmtk.preprocessing import Clip

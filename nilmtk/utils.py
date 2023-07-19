@@ -13,8 +13,6 @@ import pandas as pd
 import pytz
 from sklearn.metrics import mean_squared_error
 
-from nilmtk.datastore import CSVDataStore, HDFDataStore
-
 
 def show_versions():
     """Prints versions of various dependencies"""
@@ -214,7 +212,7 @@ def get_module_directory():
     path_to_this_file = dirname(getfile(currentframe()))
     if not isdir(path_to_this_file):
         encoding = getfilesystemencoding()
-        path_to_this_file = dirname(unicode(__file__, encoding))
+        path_to_this_file = dirname(str(__file__, encoding))
     if not isdir(path_to_this_file):
         abspath(getsourcefile(lambda _: None))
     if not isdir(path_to_this_file):
@@ -309,35 +307,6 @@ def timestamp_is_naive(timestamp):
         return False
 
 
-def get_datastore(filename, format=None, mode="r"):
-    """
-    Parameters
-    ----------
-    filename : string
-    format : 'CSV' or 'HDF', default: infer from filename ending.
-    mode : 'r' (read-only), 'a' (append) or 'w' (write), default: 'r'
-
-    Returns
-    -------
-    metadata : dict
-    """
-    if not format:
-        if filename.endswith(".h5"):
-            format = "HDF"
-        elif filename.endswith(".csv"):
-            format = "CSV"
-
-    if filename is not None:
-        if format == "HDF":
-            return HDFDataStore(filename, mode)
-        elif format == "CSV":
-            return CSVDataStore(filename)
-        else:
-            raise ValueError("format not recognised")
-    else:
-        ValueError("filename is None")
-
-
 def normalise_timestamp(timestamp, freq):
     """Returns the nearest Timestamp to `timestamp` which would be
     in the set of timestamps returned by pd.DataFrame.resample(freq=freq)
@@ -371,7 +340,7 @@ def most_common(lst):
     lst = list(lst)
     counts = {item: lst.count(item) for item in set(lst)}
     counts = pd.Series(counts)
-    counts.sort()
+    counts.sort_values()
     most_common = counts.index[-1]
     return most_common
 

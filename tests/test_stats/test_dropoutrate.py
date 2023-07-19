@@ -1,16 +1,9 @@
 import unittest
-from datetime import timedelta
 from os.path import join
 
-import numpy as np
-import pandas as pd
-
-from nilmtk import ElecMeter, HDFDataStore, MeterGroup, TimeFrame
-from nilmtk.consts import JOULES_PER_KWH
+from nilmtk import ElecMeter, HDFDataStore, MeterGroup
 from nilmtk.elecmeter import ElecMeterID
 from nilmtk.stats.dropoutrate import DropoutRate
-from nilmtk.stats.goodsectionsresults import GoodSectionsResults
-from nilmtk.stats.totalenergy import _energy_for_power_series
 
 from ..testingtools import data_dir
 

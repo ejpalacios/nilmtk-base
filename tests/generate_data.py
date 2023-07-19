@@ -1,4 +1,3 @@
-import itertools
 from collections import OrderedDict
 from datetime import timedelta
 from os.path import join

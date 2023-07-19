@@ -2,7 +2,6 @@ import os
 import tempfile
 
 from nilmtk.datastore.hdfdatastore import HDFDataStore
-from nilmtk.docinherit import doc_inherit
 
 
 class TmpDataStore(HDFDataStore):
@@ -14,7 +13,6 @@ class TmpDataStore(HDFDataStore):
         self.full_path = tmp_path
         super().__init__(filename=self.full_path, mode="a")
 
-    @doc_inherit
     def close(self):
         self.store.close()
         try:

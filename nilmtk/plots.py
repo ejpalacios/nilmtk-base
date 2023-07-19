@@ -1,17 +1,9 @@
-from math import sqrt
-
 import matplotlib
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import numpy as np
 
-try:
-    _to_ordinalf_np_vectorized = np.vectorize(mdates._to_ordinalf)
-except:
-    try:
-        _to_ordinalf_np_vectorized = np.vectorize(mdates._dt64_to_ordinalf)
-    except:
-        raise RuntimeError("This matplotlib version is not supported.")
+_to_ordinalf_np_vectorized = np.vectorize(mdates._dt64_to_ordinalf)
 
 
 def plot_series(
@@ -118,7 +110,7 @@ def latexify(fig_width=None, fig_height=None, columns=1, fontsize=8):
         fig_width = 3.39 if columns == 1 else 6.9  # width in inches
 
     if fig_height is None:
-        golden_mean = (sqrt(5) - 1.0) / 2.0  # Aesthetic ratio
+        golden_mean = (np.sqrt(5) - 1.0) / 2.0  # Aesthetic ratio
         fig_height = fig_width * golden_mean  # height in inches
 
     MAX_HEIGHT_INCHES = 8.0

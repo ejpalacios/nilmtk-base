@@ -1,11 +1,10 @@
 import json
 import os
-from warnings import warn
 
 import numpy as np
 import pandas as pd
 
-from nilmtk.disaggregate import Disaggregator
+from nilmtk.base import Disaggregator
 
 
 class Mean(Disaggregator):

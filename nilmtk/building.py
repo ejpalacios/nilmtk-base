@@ -1,9 +1,8 @@
-from collections import OrderedDict, namedtuple
+from collections import namedtuple
 
 import pandas as pd
 
-from nilmtk.datastore.datastore import join_key
-from nilmtk.hashable import Hashable
+from nilmtk.base import DataStore, Hashable
 from nilmtk.metergroup import MeterGroup
 
 BuildingID = namedtuple("BuildingID", ["instance", "dataset"])
@@ -36,7 +35,7 @@ class Building(Hashable):
 
     def save(self, destination, key):
         destination.write_metadata(key, self.metadata)
-        self.elec.save(destination, join_key(key, "elec"))
+        self.elec.save(destination, DataStore.join_key(key, "elec"))
 
     @property
     def identifier(self):

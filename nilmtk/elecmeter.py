@@ -8,12 +8,11 @@ import numpy as np
 import pandas as pd
 
 import nilmtk
+from nilmtk.base.hashable import Hashable
 from nilmtk.base.node import Node
 from nilmtk.electric import Electric
 from nilmtk.exceptions import MeasurementError
-from nilmtk.hashable import Hashable
 from nilmtk.measurement import (
-    PHYSICAL_QUANTITIES,
     check_ac_type,
     check_physical_quantity,
     select_best_ac_type,
@@ -277,12 +276,7 @@ class ElecMeter(Hashable, Electric):
             ac_types = [self.available_ac_types(pq) for pq in physical_quantity]
             return list(set(flatten_2d_list(ac_types)))
 
-        if physical_quantity not in PHYSICAL_QUANTITIES:
-            raise ValueError(
-                "`physical_quantity` must by one of '{}', not '{}'".format(
-                    PHYSICAL_QUANTITIES, physical_quantity
-                )
-            )
+        check_physical_quantity(physical_quantity)
 
         measurements = self.device["measurements"]
         return [

@@ -5,7 +5,7 @@ from warnings import warn
 
 from nilm_metadata import get_appliance_types
 
-from nilmtk.hashable import Hashable
+from nilmtk.base import Hashable
 from nilmtk.utils import flatten_2d_list
 
 ApplianceID = namedtuple("ApplianceID", ["type", "instance"])

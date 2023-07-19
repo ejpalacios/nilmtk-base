@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # NILMTK imports
-from nilmtk.consts import SECS_PER_DAY
 from nilmtk.timeframe.timeframe import TimeFrame
 
 

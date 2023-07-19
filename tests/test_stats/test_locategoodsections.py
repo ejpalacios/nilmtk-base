@@ -5,7 +5,6 @@ from os.path import join
 import numpy as np
 import pandas as pd
 
-import nilmtk
 from nilmtk import DataSet, ElecMeter, TimeFrame
 from nilmtk.datastore import HDFDataStore
 from nilmtk.elecmeter import ElecMeterID

@@ -1,19 +1,15 @@
 import re
-from collections import OrderedDict
-from copy import deepcopy
-from itertools import repeat, tee
 from os import listdir, makedirs, remove
 from os.path import dirname, exists, isdir, isfile, join
 from shutil import rmtree
-from time import time
-from typing import Any, Iterator, Optional, Union
+from typing import Iterator, Optional, Union
 
 import numpy as np
 import pandas as pd
 import yaml
 from nilm_metadata.convert_yaml_to_hdf5 import _load_file
 
-from nilmtk.datastore.datastore import DataStore, join_key, write_yaml_to_file
+from nilmtk.base.datastore import DataStore
 from nilmtk.datastore.key import Key
 from nilmtk.datastore.memory import MAX_MEM_ALLOWANCE_IN_BYTES
 from nilmtk.timeframe.timeframe import TimeFrame
@@ -173,10 +169,10 @@ class CSVDataStore(DataStore):
             del dataset_metadata["meter_devices"]
             # Write dataset metadata
             metadata_filename = join(self._get_metadata_path(), "dataset.yaml")
-            write_yaml_to_file(metadata_filename, dataset_metadata)
+            self.write_yaml_to_file(metadata_filename, dataset_metadata)
             # Write meter_devices metadata
             metadata_filename = join(self._get_metadata_path(), "meter_devices.yaml")
-            write_yaml_to_file(metadata_filename, meter_devices_metadata)
+            self.write_yaml_to_file(metadata_filename, meter_devices_metadata)
         else:
             # Write building metadata
             key_object = Key(key)
@@ -185,7 +181,7 @@ class CSVDataStore(DataStore):
                 self._get_metadata_path(),
                 "building{:d}.yaml".format(key_object.building),
             )
-            write_yaml_to_file(metadata_filename, metadata)
+            self.write_yaml_to_file(metadata_filename, metadata)
 
     def elements_below_key(self, key: str = "/") -> list[str]:
         elements = []
@@ -243,3 +239,8 @@ class CSVDataStore(DataStore):
             if key_object.building and key_object.meter:
                 abs_path += ".csv"
         return abs_path
+
+    @staticmethod
+    def write_yaml_to_file(metadata_filename: str, metadata: dict) -> None:
+        with open(metadata_filename, "w") as metadata_file:
+            yaml.dump(metadata, metadata_file)

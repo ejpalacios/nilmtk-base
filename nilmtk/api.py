@@ -1,12 +1,8 @@
-import datetime
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from nilmtk.dataset import DataSet
-from nilmtk.losses import *
-from nilmtk.metergroup import MeterGroup
 
 
 class API:

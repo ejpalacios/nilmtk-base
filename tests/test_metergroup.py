@@ -7,12 +7,10 @@ from nilmtk import (
     ElecMeter,
     HDFDataStore,
     MeterGroup,
-    TimeFrame,
     global_meter_group,
 )
 from nilmtk.building import BuildingID
 from nilmtk.elecmeter import ElecMeterID
-from nilmtk.utils import nodes_adjacent_to_root, tree_root
 
 from .testingtools import data_dir
 

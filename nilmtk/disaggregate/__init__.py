@@ -1,1 +1,1 @@
-from .disaggregator import Disaggregator
+from .mean import Mean

@@ -1,4 +1,3 @@
-import abc
 import copy
 
 import pandas as pd
@@ -28,8 +27,6 @@ class Results(object):
     name : str
         The string used to cache this results object.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self):
         self._data = pd.DataFrame(columns=["end"])
