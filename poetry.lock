@@ -1822,9 +1822,9 @@ six = "*"
 
 [package.source]
 type = "git"
-url = "git@gitlab.esat.kuleuven.be:premises/nilmtk-metadata.git"
+url = "https://github.com/ejpalacios/nilm_metadata.git"
 reference = "HEAD"
-resolved_reference = "a0758b6075d584ffcd50e5ca7d3c900e991d5cf1"
+resolved_reference = "f5d345976e0fdd910f7d8d31b43edb23725e3fd2"
 
 [[package]]
 name = "nose"
@@ -3086,4 +3086,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.12"
-content-hash = "f717ad946630afc75bdcea3d5946a537a8a96e1dbb5747e3b7c414e587ce2d6f"
+content-hash = "d3a13fe0f1de3e17573440ec785996d0008dd584be00b69617ce4ab1adbe103c"

@@ -16,8 +16,8 @@ tables = "^3.8.0"
 scikit-learn = "^1.3.0"
 PyYAML = "^6.0"
 pytz = "^2023.3"
-nilm-metadata = {git = "git@gitlab.esat.kuleuven.be:premises/nilmtk-metadata.git"}
 matplotlib = "^3.7.2"
+nilm-metadata = {git = "https://github.com/ejpalacios/nilm_metadata.git"}
 
 
 [tool.poetry.group.test.dependencies]
