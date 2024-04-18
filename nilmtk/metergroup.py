@@ -734,7 +734,7 @@ class MeterGroup(Electric):
             self._convert_physical_quantity_and_ac_type_to_cols(**kwargs)["columns"],
             names=LEVEL_NAMES,
         )
-        freq = "{:d}S".format(int(sample_period))
+        freq = "{:d}s".format(int(sample_period))
 
         # Check for empty sections
         sections = [section for section in sections if section]
