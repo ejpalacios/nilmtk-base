@@ -312,7 +312,7 @@ def normalise_timestamp(timestamp, freq):
     in the set of timestamps returned by pd.DataFrame.resample(freq=freq)
     """
     timestamp = pd.Timestamp(timestamp)
-    series = pd.Series(np.NaN, index=[timestamp])
+    series = pd.Series(np.nan, index=[timestamp])
     resampled = series.resample(freq).mean()
     return resampled.index[0]
 
@@ -414,7 +414,7 @@ def compute_rmse(ground_truth, predictions, pretty=True):
         if not df_app.empty:
             app_rms_error = np.sqrt(mean_squared_error(df_app["gt"], df_app["pr"]))
         else:
-            app_rms_error = np.NaN
+            app_rms_error = np.nan
 
         if pretty:
             app_counts[app_label] += 1

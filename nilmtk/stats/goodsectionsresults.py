@@ -151,4 +151,8 @@ class GoodSectionsResults(Results):
                     }
                 )
         df = pd.DataFrame(data_for_cache, index=index_for_cache)
-        return df.apply(pd.to_numeric, errors="ignore")
+        try:
+            df = df.apply(pd.to_numeric)
+        except Exception as e:
+            print(e)
+        return df

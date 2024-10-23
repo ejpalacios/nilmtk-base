@@ -21,7 +21,7 @@ mypy: .venv/bin/activate
 	poetry run mypy $(PACKAGE) $(TEST) --install-types --non-interactive
 
 test: .venv/bin/activate
-	poetry run nosetests $(TEST) --with-coverage -cover-package=$(PACKAGE) -v
+	poetry run pytest --cov=$(PACKAGE) -v
 
 ## Run local CI
 local-ci: isort black mypy test

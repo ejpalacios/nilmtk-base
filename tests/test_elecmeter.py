@@ -55,15 +55,15 @@ class TestElecMeter(unittest.TestCase):
         with self.assertWarns(RuntimeWarning):
             self.assertIsNone(meter1.upstream_meter())
         meter2 = ElecMeter(metadata={"submeter_of": 1}, meter_id=METER_ID2)
-        self.assertEquals(meter2.upstream_meter(), meter1)
+        self.assertEqual(meter2.upstream_meter(), meter1)
         meter3 = ElecMeter(metadata={"submeter_of": 2}, meter_id=METER_ID3)
-        self.assertEquals(meter3.upstream_meter(), meter2)
+        self.assertEqual(meter3.upstream_meter(), meter2)
 
     def test_proportion_of_energy(self):
         meter = ElecMeter(
             store=self.datastore, metadata=self.meter_meta, meter_id=METER_ID
         )
-        self.assertEquals(meter.proportion_of_energy(meter), 1.0)
+        self.assertEqual(meter.proportion_of_energy(meter), 1.0)
 
     def correlation(self):
         meter_1 = ElecMeter(

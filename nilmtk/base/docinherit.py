@@ -24,6 +24,7 @@ and  Baz.foo.__doc__ == Baz().foo.__doc__ == Bar.foo.__doc__ == Foo.foo.__doc__
 From: http://code.activestate.com/recipes/576862-docstring-inheritance-decorator/
 and: https://stackoverflow.com/a/38414303/8289769
 """
+
 import inspect
 from functools import wraps
 from typing import Any, Callable, cast

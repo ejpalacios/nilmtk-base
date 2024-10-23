@@ -28,7 +28,6 @@ ElecMeterID = namedtuple("ElecMeterID", ["instance", "building", "dataset"])
 
 
 class ElecMeter(Hashable, Electric):
-
     """Represents a physical electricity meter.
 
     Attributes

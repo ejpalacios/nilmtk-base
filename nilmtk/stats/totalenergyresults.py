@@ -40,4 +40,8 @@ class TotalEnergyResults(Results):
         return self.combined()
 
     def export_to_cache(self):
-        return self._data.fillna(0).apply(pd.to_numeric, errors="ignore")
+        try:
+            df = self._data.fillna(0).apply(pd.to_numeric)
+        except Exception as e:
+            print(e)
+        return df 

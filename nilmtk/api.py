@@ -6,7 +6,6 @@ from nilmtk.dataset import DataSet
 
 
 class API:
-
     """
     The API ia designed for rapid experimentation with NILM Algorithms.
     """

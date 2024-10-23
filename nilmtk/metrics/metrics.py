@@ -249,7 +249,7 @@ def f1_score(predictions, ground_truth):
                     pred_meter, ground_truth_meter
                 )
             )
-            avg_score = np.NaN
+            avg_score = np.nan
         f1_scores[pred_meter.instance()] = avg_score
 
     return pd.Series(f1_scores)

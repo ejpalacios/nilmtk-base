@@ -40,7 +40,7 @@ def get_dropout_rate(data, sample_period):
     """
     MIN_N_SAMPLES = 5
     if len(data) < MIN_N_SAMPLES:
-        return np.NaN
+        return np.nan
 
     index = get_index(data)
     assert index[-1] > index[0]

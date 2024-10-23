@@ -2,7 +2,6 @@ from nilmtk.base.node import Node
 
 
 class Apply(Node):
-
     """Apply an arbitrary function to each pd.Series chunk."""
 
     def __init__(self, upstream=None, generator=None, func=None):

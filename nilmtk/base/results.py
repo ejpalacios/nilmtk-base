@@ -187,7 +187,11 @@ class Results(object):
         timezones (e.g. Europe/London across a daylight saving
         boundary).
         """
-        return self._data.apply(pd.to_numeric, errors="ignore")
+        try:
+            df = self._data.apply(pd.to_numeric)
+        except Exception as e:
+            print(e)
+        return df
 
     def timeframes(self):
         """Returns a list of timeframes covered by this Result."""

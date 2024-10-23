@@ -270,7 +270,7 @@ class Electric(object):
         else:
             td = self.get_timeframe().timedelta
         if not td:
-            return np.NaN
+            return np.nan
         uptime_secs = td.total_seconds()
         periods = uptime_secs / offset_alias_to_seconds(offset_alias)
         energy = self.total_energy(**load_kwargs)
@@ -297,7 +297,7 @@ class Electric(object):
         # TODO test effect of setting `sections` for other
         other_total_energy = other.total_energy(**loader_kwargs)
         if other_total_energy.sum() == 0:
-            return np.NaN
+            return np.nan
 
         total_energy = self.total_energy(**loader_kwargs)
         if total_energy.empty:
@@ -351,11 +351,11 @@ class Electric(object):
 
         x_n, x_sum = sum_and_count(self)
         if x_n <= 1:
-            return np.NaN
+            return np.nan
 
         y_n, y_sum = sum_and_count(other)
         if y_n <= 1:
-            return np.NaN
+            return np.nan
 
         x_bar = x_sum / x_n
         y_bar = y_sum / y_n
