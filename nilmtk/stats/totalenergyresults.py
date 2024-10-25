@@ -44,4 +44,4 @@ class TotalEnergyResults(Results):
             df = self._data.fillna(0).apply(pd.to_numeric)
         except Exception as e:
             print(e)
-        return df 
+        return df

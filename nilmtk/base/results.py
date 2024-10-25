@@ -77,7 +77,11 @@ class Results(object):
         row["end"] = timeframe.end
         for key, val in new_results.items():
             row[key] = val
-        self._data = pd.concat([self._data, row], verify_integrity=True, sort=False)
+
+        if self._data.empty:
+            self._data = row.copy()
+        elif not row.empty:
+            self._data = pd.concat([self._data, row], verify_integrity=True, sort=False)
         self._data.sort_index(inplace=True)
 
     def check_for_overlap(self):
@@ -104,10 +108,10 @@ class Results(object):
         if not isinstance(new_result, self.__class__):
             raise TypeError("new_results must be of type '{}'".format(self.__class__))
 
-        if new_result._data.empty:
-            return
-
-        self._data = pd.concat([self._data, new_result._data], sort=False)
+        if self._data.empty:
+            self._data = new_result._data.copy()
+        elif not new_result._data.empty:
+            self._data = pd.concat([self._data, new_result._data], sort=False)
         self._data.sort_index(inplace=True)
         self.check_for_overlap()
 

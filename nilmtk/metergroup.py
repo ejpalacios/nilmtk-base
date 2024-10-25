@@ -1092,6 +1092,7 @@ class MeterGroup(Electric):
             for j, m_j in enumerate(self.meters):
                 id_i = m_i.identifier
                 id_j = m_j.identifier
+                print(id_i, id_j)
                 if i > j:
                     result[id_i][id_j] = result[id_j][id_i]
                 else:
@@ -1948,7 +1949,7 @@ def combine_chunks_from_generators(index, columns, meters, kwargs):
         if columns_to_average:
             counter_increment = pd.DataFrame(
                 1,
-                columns=columns_to_average,
+                columns=list(columns_to_average),
                 dtype=np.uint16,
                 index=chunk_from_next_meter.index,
             )
