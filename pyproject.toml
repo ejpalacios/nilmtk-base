@@ -30,7 +30,7 @@ pytest-coverage = "^0.0"
 matplotlib = "^3.7.2"
 jupyterlab = "^4.0.2"
 black = "^26.1.0"
-isort = "^8.0.1"
+isort = "^9.0.0"
 mypy = "^2.1.0"
 
 [tool.isort]
